@@ -37,6 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * The hazelcast instance is created/fetched in this class
  */
 public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
+
     /**
      * Identity generator
      */
@@ -101,8 +102,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * @return the created hazelcast configuration
      * @throws ResourceAdapterInternalException If there was a problem with the configuration creation
      */
-    private ConfigBuilder buildConfiguration()
-            throws ResourceAdapterInternalException {
+    private ConfigBuilder buildConfiguration() throws ResourceAdapterInternalException {
         XmlConfigBuilder config;
         if (configurationLocation == null || configurationLocation.length() == 0) {
             config = new XmlConfigBuilder();
@@ -196,5 +196,4 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
 }

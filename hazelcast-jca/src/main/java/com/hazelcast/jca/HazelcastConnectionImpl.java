@@ -71,14 +71,17 @@ import java.util.logging.Level;
  * Implementation class of {@link com.hazelcast.jca.HazelcastConnectionImpl}
  */
 public class HazelcastConnectionImpl implements HazelcastConnection {
+
     /**
      * Identity generator
      */
     private static AtomicInteger idGen = new AtomicInteger();
+
     /**
      * Reference to this creator and access to container infrastructure
      */
     final ManagedConnectionImpl managedConnection;
+
     /**
      * this identity
      */
@@ -92,13 +95,13 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
     @Override
     public void close() throws ResourceException {
         managedConnection.log(Level.FINEST, "close");
-        //important: inform the container!
+        // important: inform the container!
         managedConnection.fireConnectionEvent(ConnectionEvent.CONNECTION_CLOSED, this);
     }
 
     @Override
     public Interaction createInteraction() throws ResourceException {
-        //TODO
+        // TODO
         return null;
     }
 
@@ -349,26 +352,25 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
 
     @Override
     public <T> T executeTransaction(TransactionalTask<T> task) throws TransactionException {
-        throw new UnsupportedOperationException("getTransactional*() methods are "
-                + "only methods allowed for transactional operations!");
+        throw new UnsupportedOperationException("getTransactional*() methods are"
+                + " only methods allowed for transactional operations!");
     }
 
     @Override
     public <T> T executeTransaction(TransactionOptions options, TransactionalTask<T> task) throws TransactionException {
-        throw new UnsupportedOperationException("getTransactional*() methods are "
-                + "only methods allowed for transactional operations!");
+        throw new UnsupportedOperationException("getTransactional*() methods are"
+                + " only methods allowed for transactional operations!");
     }
 
     @Override
     public TransactionContext newTransactionContext() {
-        throw new UnsupportedOperationException("getTransactional*() methods are "
-                + "only methods allowed for transactional operations!");
+        throw new UnsupportedOperationException("getTransactional*() methods are"
+                + " only methods allowed for transactional operations!");
     }
 
     @Override
     public TransactionContext newTransactionContext(TransactionOptions options) {
-        throw new UnsupportedOperationException("getTransactional*() methods are "
-                + "only methods allowed for transactional operations!");
+        throw new UnsupportedOperationException("getTransactional*() methods are"
+                + " only methods allowed for transactional operations!");
     }
-
 }

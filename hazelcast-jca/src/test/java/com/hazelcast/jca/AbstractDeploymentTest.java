@@ -19,16 +19,13 @@ package com.hazelcast.jca;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.ResourceAdapterArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 /**
-* base class for jca tests
-*
-* @author asimarslan
-*/
-public class AbstractDeploymentTest {
+ * Base class for JCA tests.
+ */
+abstract class AbstractDeploymentTest {
 
     @Deployment(testable = false, name = "rar-deployment", order = 1)
     public static ResourceAdapterArchive createResourceAdapterDeployment() {
@@ -44,7 +41,7 @@ public class AbstractDeploymentTest {
     @Deployment(name = "war-deployment", order = 2)
     public static WebArchive createWebDeployment() {
         WebArchive wa = ShrinkWrap.create(WebArchive.class, "waa.war");
-        wa.addAsResource("h2-xa-ds.xml","h2-xa-ds.xml");
+        wa.addAsResource("h2-xa-ds.xml", "h2-xa-ds.xml");
         wa.addClass(TestBean.class);
         wa.addClass(ITestBean.class);
         wa.addClass(TestInContainer.class);

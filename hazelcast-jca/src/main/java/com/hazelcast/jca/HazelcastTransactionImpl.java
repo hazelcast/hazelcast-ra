@@ -27,6 +27,7 @@ import java.util.logging.Level;
  * Implementation class of {@link com.hazelcast.jca.HazelcastTransaction}
  */
 public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransaction {
+
     /** List of former transaction used during transaction restore */
     //private static final ConcurrentMap<CallContext,CallContext> predecessors=new ConcurrentHashMap<CallContext,CallContext>();
 
@@ -34,20 +35,22 @@ public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransa
      * access to the creator of this {@link #connection}
      */
     private final ManagedConnectionFactoryImpl factory;
+
     /**
      * access to the creator of this transaction
      */
     private final ManagedConnectionImpl connection;
+
     /**
      * The hazelcast transaction context itself
      */
     private TransactionContext txContext;
 
     public HazelcastTransactionImpl(ManagedConnectionFactoryImpl factory, ManagedConnectionImpl connection) {
-        this.setLogWriter(factory.getLogWriter());
-
         this.factory = factory;
         this.connection = connection;
+
+        setLogWriter(factory.getLogWriter());
     }
 
     /**
@@ -104,7 +107,6 @@ public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransa
         }
     }
 
-
     /* (non-Javadoc)
      * @see javax.resource.cci.LocalTransaction#rollback()
      */
@@ -117,13 +119,12 @@ public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransa
             fireConnectionEvent(ConnectionEvent.LOCAL_TRANSACTION_ROLLEDBACK);
             this.txContext = null;
         } else {
-            throw new ResourceException("Invalid transaction context; "
-                    + "rollback operation invoked without an active transaction context");
+            throw new ResourceException("Invalid transaction context;"
+                    + " rollback operation invoked without an active transaction context");
         }
     }
 
     public TransactionContext getTxContext() {
         return txContext;
     }
-
 }

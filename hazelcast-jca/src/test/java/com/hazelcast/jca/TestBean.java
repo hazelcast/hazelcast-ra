@@ -43,7 +43,7 @@ public class TestBean implements ITestBean {
         HazelcastConnection hzConn = null;
         try {
             hzConn = getConnection();
-            TransactionalMap<String,String> txmap = hzConn.getTransactionalMap(mapname);
+            TransactionalMap<String, String> txmap = hzConn.getTransactionalMap(mapname);
             txmap.put(key, value);
         } finally {
             closeConnection(hzConn);
@@ -55,7 +55,7 @@ public class TestBean implements ITestBean {
         HazelcastConnection hzConn = null;
         try {
             hzConn = getConnection();
-            TransactionalMap<String,String> txmap = hzConn.getTransactionalMap(mapname);
+            TransactionalMap<String, String> txmap = hzConn.getTransactionalMap(mapname);
             return txmap.get(key);
         } finally {
             closeConnection(hzConn);

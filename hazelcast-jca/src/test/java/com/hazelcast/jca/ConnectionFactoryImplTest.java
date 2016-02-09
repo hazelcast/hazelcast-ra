@@ -48,7 +48,7 @@ public class ConnectionFactoryImplTest extends HazelcastTestSupport {
 
     @Test
     public void testJNDI() throws NamingException {
-        assertSame(ref,connectionFactory.getReference());
+        assertSame(ref, connectionFactory.getReference());
         assertTrue(connectionFactory instanceof Referenceable);
         assertTrue(connectionFactory instanceof Serializable);
     }

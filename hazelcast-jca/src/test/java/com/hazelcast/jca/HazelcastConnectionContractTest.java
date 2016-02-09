@@ -22,18 +22,19 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
+
 /**
- * This test class is to ensure that lifecycle and transaction methods are not exposed in {@link com.hazelcast.jca.HazelcastConnection}
+ * Ensures that lifecycle and transaction methods are not exposed in {@link com.hazelcast.jca.HazelcastConnection}
  */
 @Category(QuickTest.class)
 @RunWith(HazelcastSerialClassRunner.class)
 public class HazelcastConnectionContractTest {
 
-    static HazelcastConnectionImpl connection;
+    private static HazelcastConnectionImpl connection;
 
     @BeforeClass
     public static void setup() {
-       connection = new HazelcastConnectionImpl(null,null);
+        connection = new HazelcastConnectionImpl(null, null);
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -53,7 +54,7 @@ public class HazelcastConnectionContractTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testExecuteTransactionTwoArgs() {
-        connection.executeTransaction(null,null);
+        connection.executeTransaction(null, null);
     }
 
     @Test(expected = UnsupportedOperationException.class)

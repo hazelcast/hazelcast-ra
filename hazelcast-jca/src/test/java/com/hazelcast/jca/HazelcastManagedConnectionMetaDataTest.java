@@ -30,6 +30,7 @@ import static org.junit.Assert.assertNull;
 @RunWith(HazelcastParallelClassRunner.class)
 @Category(QuickTest.class)
 public class HazelcastManagedConnectionMetaDataTest {
+
     private HazelcastManagedConnectionMetaData metaData = new HazelcastManagedConnectionMetaData();
 
     @Test

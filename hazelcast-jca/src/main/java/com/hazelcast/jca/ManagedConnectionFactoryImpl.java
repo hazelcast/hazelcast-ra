@@ -42,7 +42,9 @@ import static java.util.Collections.emptySet;
  * @see #setResourceAdapter(ResourceAdapter)
  */
 public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConnectionFactory, ResourceAdapterAssociation {
+
     private static final long serialVersionUID = -4889598421534961926L;
+
     /**
      * Identity generator
      */
@@ -57,6 +59,7 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      * Access to this resource adapter instance itself
      */
     private ResourceAdapterImpl resourceAdapter;
+
     /**
      * Definies which events should be traced
      *
@@ -85,8 +88,7 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
     /* (non-Javadoc)
      * @see javax.resource.spi.ManagedConnectionFactory#createConnectionFactory(javax.resource.spi.ConnectionManager)
      */
-    public HazelcastConnectionFactory createConnectionFactory(ConnectionManager cm)
-            throws ResourceException {
+    public HazelcastConnectionFactory createConnectionFactory(ConnectionManager cm) throws ResourceException {
         log(Level.FINEST, "createConnectionFactory cm: " + cm);
         logHzConnectionEvent(this, HzConnectionEvent.FACTORY_INIT);
         return new ConnectionFactoryImpl(this, cm);
@@ -96,8 +98,8 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      * @see javax.resource.spi.ManagedConnectionFactory
      * #createManagedConnection(javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
      */
-    public ManagedConnection createManagedConnection(Subject subject,
-                                                     ConnectionRequestInfo cxRequestInfo) throws ResourceException {
+    public ManagedConnection createManagedConnection(Subject subject, ConnectionRequestInfo cxRequestInfo)
+            throws ResourceException {
         log(Level.FINEST, "createManagedConnection");
 
         return new ManagedConnectionImpl(cxRequestInfo, this);
@@ -174,9 +176,8 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      * @see javax.resource.spi.ManagedConnectionFactory
      * #matchManagedConnections(java.util.Set, javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
      */
-    public ManagedConnection matchManagedConnections(@SuppressWarnings("rawtypes") Set connectionSet,
-                                                     Subject subject, ConnectionRequestInfo cxRequestInfo)
-            throws ResourceException {
+    public ManagedConnection matchManagedConnections(@SuppressWarnings("rawtypes") Set connectionSet, Subject subject,
+                                                     ConnectionRequestInfo cxRequestInfo) throws ResourceException {
         log(Level.FINEST, "matchManagedConnections");
 
         if ((null != connectionSet) && !connectionSet.isEmpty()) {
@@ -196,7 +197,6 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
         // null is interpreted as "create new one" by the container
         return null;
     }
-
 
     /**
      * Setter for the property 'connectionTracingEvents'.
@@ -264,6 +264,4 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
     public void setId(int id) {
         this.id = id;
     }
-
-
 }

@@ -36,35 +36,38 @@ import java.util.logging.Level;
  * Implementation class of {@link javax.resource.spi.ManagedConnection}
  */
 public class ManagedConnectionImpl extends JcaBase implements ManagedConnection {
+
     /**
      * Identity generator
      */
     private static final AtomicInteger ID_GEN = new AtomicInteger();
+
     /**
      * Identity
      */
     private final transient int id;
 
+    // Application server will always register at least one listener
+    private final List<ConnectionEventListener> connectionEventListeners = new ArrayList<ConnectionEventListener>(1);
+
     private final ManagedConnectionFactoryImpl factory;
     private final ConnectionRequestInfo cxRequestInfo;
 
     private final HazelcastInstance hazelcastInstance;
-    // Application server will always register at least one listener
-    private final List<ConnectionEventListener> connectionEventListeners = new ArrayList<ConnectionEventListener>(1);
 
     private HazelcastTransactionImpl localTransaction;
 
     public ManagedConnectionImpl(ConnectionRequestInfo cxRequestInfo, ManagedConnectionFactoryImpl factory) {
-        this.setLogWriter(factory.getLogWriter());
-        log(Level.FINEST, "ManagedConnectionImpl");
+        this.id = ID_GEN.incrementAndGet();
 
         this.factory = factory;
         this.cxRequestInfo = cxRequestInfo;
 
-        this.id = ID_GEN.incrementAndGet();
         ResourceAdapterImpl resourceAdapter = factory.getResourceAdapter();
-        hazelcastInstance = resourceAdapter.getHazelcastInstance();
+        this.hazelcastInstance = resourceAdapter.getHazelcastInstance();
 
+        setLogWriter(factory.getLogWriter());
+        log(Level.FINEST, "ManagedConnectionImpl");
         factory.logHzConnectionEvent(this, HzConnectionEvent.CREATE);
     }
 
@@ -94,30 +97,30 @@ public class ManagedConnectionImpl extends JcaBase implements ManagedConnection 
     void fireConnectionEvent(int event, Connection conn) {
         log(Level.FINEST, "fireConnectionEvent: " + event);
 
-        ConnectionEvent connnectionEvent = new ConnectionEvent(this, event);
+        ConnectionEvent connectionEvent = new ConnectionEvent(this, event);
 
         for (ConnectionEventListener listener : connectionEventListeners) {
             switch (event) {
                 case ConnectionEvent.LOCAL_TRANSACTION_STARTED:
                     if (isDeliverStartedEvent()) {
-                        listener.localTransactionStarted(connnectionEvent);
+                        listener.localTransactionStarted(connectionEvent);
                     }
                     break;
                 case ConnectionEvent.LOCAL_TRANSACTION_COMMITTED:
                     if (isDeliverCommitedEvent()) {
-                        listener.localTransactionCommitted(connnectionEvent);
+                        listener.localTransactionCommitted(connectionEvent);
                     }
                     break;
                 case ConnectionEvent.LOCAL_TRANSACTION_ROLLEDBACK:
                     if (isDeliverRolledback()) {
-                        listener.localTransactionRolledback(connnectionEvent);
+                        listener.localTransactionRolledback(connectionEvent);
                     }
                     break;
                 case ConnectionEvent.CONNECTION_CLOSED:
                     if (isDeliverClosed()) {
                         //Connection handle is only required for close as per spec 6.5.7
-                        connnectionEvent.setConnectionHandle(conn);
-                        listener.connectionClosed(connnectionEvent);
+                        connectionEvent.setConnectionHandle(conn);
+                        listener.connectionClosed(connectionEvent);
                     }
                     break;
                 default:
@@ -126,10 +129,8 @@ public class ManagedConnectionImpl extends JcaBase implements ManagedConnection 
         }
     }
 
-    public HazelcastConnection getConnection(Subject subject,
-                                             ConnectionRequestInfo connectionRequestInfo) {
-        log(Level.FINEST, "getConnection: " + subject + ", "
-                + connectionRequestInfo);
+    public HazelcastConnection getConnection(Subject subject, ConnectionRequestInfo connectionRequestInfo) {
+        log(Level.FINEST, "getConnection: " + subject + ", " + connectionRequestInfo);
         // must be new as per JCA spec
         return new HazelcastConnectionImpl(this, subject);
     }
@@ -191,5 +192,4 @@ public class ManagedConnectionImpl extends JcaBase implements ManagedConnection 
     public String toString() {
         return "hazelcast.ManagedConnectionImpl [" + id + "]";
     }
-
 }

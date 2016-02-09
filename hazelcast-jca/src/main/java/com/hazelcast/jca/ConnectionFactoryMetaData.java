@@ -23,6 +23,7 @@ import javax.resource.cci.ResourceAdapterMetaData;
  * specific information in a JCA-compatible format
  */
 final class ConnectionFactoryMetaData implements ResourceAdapterMetaData {
+
     /**
      * JCA-Connector specific java packge to be used for all information retrieval
      */
