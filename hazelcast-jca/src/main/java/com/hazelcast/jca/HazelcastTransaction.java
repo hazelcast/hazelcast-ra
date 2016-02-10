@@ -22,5 +22,4 @@ package com.hazelcast.jca;
  * {@link javax.resource.spi.LocalTransaction} into one interface
  */
 public interface HazelcastTransaction extends javax.resource.cci.LocalTransaction, javax.resource.spi.LocalTransaction {
-
 }

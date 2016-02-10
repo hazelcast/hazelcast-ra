@@ -58,5 +58,4 @@ public interface HazelcastConnection extends Connection, HazelcastInstance {
      * @see com.hazelcast.transaction.TransactionalTaskContext#getSet(String)
      */
     <E> TransactionalSet<E> getTransactionalSet(String name);
-
 }

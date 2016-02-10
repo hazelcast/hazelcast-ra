@@ -39,11 +39,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-
 /**
- * Arquillian tests for xa transactions
- *
- * @author asimarslan
+ * Arquillian tests for xa transactions.
  */
 @RunWith(Arquillian.class)
 @Category(SlowTest.class)
@@ -53,7 +50,7 @@ public class XATransactionTest extends AbstractDeploymentTest {
 
     private static UserTransaction userTx;
 
-    private static DataSource h2Datasource;
+    private static DataSource h2DataSource;
 
     private static boolean isDbInit = false;
 
@@ -61,13 +58,13 @@ public class XATransactionTest extends AbstractDeploymentTest {
     public static void init() throws SQLException, NamingException {
         InitialContext context = new InitialContext();
         userTx = (UserTransaction) context.lookup("java:comp/UserTransaction");
-        connectionFactory = (HazelcastConnectionFactory) context.lookup ( "HazelcastCF" );
+        connectionFactory = (HazelcastConnectionFactory) context.lookup("HazelcastCF");
         if (!isDbInit) {
             isDbInit = true;
 
-            h2Datasource = JdbcConnectionPool.create("jdbc:h2:mem:test", "sa", "sa");
+            h2DataSource = JdbcConnectionPool.create("jdbc:h2:mem:test", "sa", "sa");
 
-            Connection con = h2Datasource.getConnection();
+            Connection con = h2DataSource.getConnection();
             Statement stmt = null;
             try {
                 stmt = con.createStatement();
@@ -151,16 +148,15 @@ public class XATransactionTest extends AbstractDeploymentTest {
         }
     }
 
-    protected HazelcastConnection getConnection() throws Throwable{
+    protected HazelcastConnection getConnection() throws Throwable {
         assertNotNull(connectionFactory);
         HazelcastConnection c = connectionFactory.getConnection();
         assertNotNull(c);
         return c;
     }
 
-    protected void doSql() throws NamingException, SQLException {
-
-        Connection con = h2Datasource.getConnection();
+    private void doSql() throws NamingException, SQLException {
+        Connection con = h2DataSource.getConnection();
         Statement stmt = null;
         try {
             stmt = con.createStatement();
@@ -173,9 +169,8 @@ public class XATransactionTest extends AbstractDeploymentTest {
         }
     }
 
-    protected void validateSQLdata(boolean hasdata) throws NamingException, SQLException {
-
-        Connection con = h2Datasource.getConnection();
+    private void validateSQLdata(boolean hasdata) throws NamingException, SQLException {
+        Connection con = h2DataSource.getConnection();
         Statement stmt = null;
 
         try {
@@ -202,6 +197,4 @@ public class XATransactionTest extends AbstractDeploymentTest {
             con.close();
         }
     }
-
-
 }

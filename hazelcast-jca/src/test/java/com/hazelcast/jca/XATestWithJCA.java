@@ -194,7 +194,6 @@ public class XATestWithJCA extends HazelcastTestSupport {
             } catch (Exception e) {
                 throw ExceptionUtil.rethrow(e);
             }
-
         }
 
         @Override
@@ -203,19 +202,14 @@ public class XATestWithJCA extends HazelcastTestSupport {
 
         @Override
         public void localTransactionCommitted(ConnectionEvent event) {
-
         }
 
         @Override
         public void localTransactionRolledback(ConnectionEvent event) {
-
         }
 
         @Override
         public void connectionErrorOccurred(ConnectionEvent event) {
-
         }
-
     }
-
 }

@@ -20,12 +20,11 @@ import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.DistributedObjectListener;
 
 import javax.ejb.Local;
-import javax.resource.ResourceException;
-import javax.resource.cci.LocalTransaction;
 import java.util.Collection;
 
 @Local
 public interface ITestBean {
+
     void insertToMap(String mapname, String key, String value);
 
     String getFromMap(String mapname, String key);

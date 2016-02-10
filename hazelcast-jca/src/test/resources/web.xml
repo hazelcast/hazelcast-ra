@@ -6,7 +6,7 @@
          version="2.4">
 
     <display-name>Hazelcast JCA Example</display-name>
-    <description></description>
+    <description/>
 
     <servlet>
         <servlet-name>Hello</servlet-name>

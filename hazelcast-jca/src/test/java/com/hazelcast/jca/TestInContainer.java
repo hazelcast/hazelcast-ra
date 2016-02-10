@@ -20,7 +20,6 @@ import com.hazelcast.core.DistributedObject;
 import com.hazelcast.test.annotation.SlowTest;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -82,7 +81,7 @@ public class TestInContainer extends AbstractDeploymentTest {
         testBean.addToList(listname, key);
         assertEquals(1, testBean.getListSize(listname));
         assertTrue(testBean.removeFromList(listname, key));
-        assertEquals(0,testBean.getListSize(listname));
+        assertEquals(0, testBean.getListSize(listname));
     }
 
     @Test
@@ -97,7 +96,7 @@ public class TestInContainer extends AbstractDeploymentTest {
 
         assertNotNull(testBean.getDistributedObjects());
         Collection<DistributedObject> distributedObjectCollection = testBean.getDistributedObjects();
-        //There should be one XAResource distibuted object in addition to two maps we created here
+        // there should be one XAResource distibuted object in addition to two maps we created here
         assertEquals(3, distributedObjectCollection.size());
     }
 }

@@ -34,26 +34,32 @@ import java.util.concurrent.atomic.AtomicInteger;
  * resource adapter
  */
 public class ConnectionFactoryImpl implements HazelcastConnectionFactory {
+
     /**
      * identity generator
      */
     private static final AtomicInteger ID_GEN = new AtomicInteger();
+
     /**
      * class LOGGER
      */
     private static final ILogger LOGGER = Logger.getLogger("com.hazelcast.jca");
+
     /**
      * this identity
      */
     private static final long serialVersionUID = -5909363703528221650L;
+
     /**
      * Access to this resource adapter infrastructure
      */
     private ManagedConnectionFactoryImpl mcf;
+
     /**
      * Container's connection manager - i.e. for pooling
      */
     private ConnectionManager cm;
+
     /**
      * JNDI reference - not used
      */
@@ -76,7 +82,7 @@ public class ConnectionFactoryImpl implements HazelcastConnectionFactory {
      */
     public HazelcastConnection getConnection() throws ResourceException {
         LOGGER.finest("getConnection");
-        return this.getConnection(null);
+        return getConnection(null);
     }
 
     /* (non-Javadoc)
@@ -151,6 +157,4 @@ public class ConnectionFactoryImpl implements HazelcastConnectionFactory {
     public void setId(int id) {
         this.id = id;
     }
-
-
 }

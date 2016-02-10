@@ -38,16 +38,15 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 
 @RunWith(HazelcastParallelClassRunner.class)
 @Category(QuickTest.class)
-public class HazelcastTransactionImplTest extends HazelcastTestSupport{
+public class HazelcastTransactionImplTest extends HazelcastTestSupport {
 
-    private HazelcastInstance instance;
     private HazelcastTransaction transaction;
     private ManagedConnection managedConnection;
     private ConnectionEventListener mockEventListener;
 
     @Before
     public void setup() throws ResourceException {
-        instance = createHazelcastInstance();
+        HazelcastInstance instance = createHazelcastInstance();
         ResourceAdapterImpl resourceAdapter = new ResourceAdapterImpl();
         resourceAdapter.setHazelcastInstance(instance);
         ManagedConnectionFactoryImpl managedConnectionFactory = new ManagedConnectionFactoryImpl();
@@ -88,5 +87,4 @@ public class HazelcastTransactionImplTest extends HazelcastTestSupport{
         transaction.commit();
         verifyZeroInteractions(mockEventListener);
     }
-
 }

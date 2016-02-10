@@ -51,7 +51,7 @@ public class ManagedConnectionFactoryImplTest extends HazelcastTestSupport {
 
     @Test
     public void testSetConnectionTracingEvents() {
-        ManagedConnectionFactoryImpl fact = (ManagedConnectionFactoryImpl)connectionFactory;
+        ManagedConnectionFactoryImpl fact = (ManagedConnectionFactoryImpl) connectionFactory;
         String controlStr = "DESTROY,  TX_START  , CLEANUP,TX_COMPLETE";
         String failproofString = controlStr + ",,invalid_argument";
 
@@ -69,14 +69,14 @@ public class ManagedConnectionFactoryImplTest extends HazelcastTestSupport {
     public void testMatchExistingManagedConnection() throws ResourceException {
         ResourceAdapterImpl mockResourceAdapter = mock(ResourceAdapterImpl.class);
         when(mockResourceAdapter.getHazelcastInstance()).thenReturn(null);
-        ((ManagedConnectionFactoryImpl)connectionFactory).setResourceAdapter(mockResourceAdapter);
+        ((ManagedConnectionFactoryImpl) connectionFactory).setResourceAdapter(mockResourceAdapter);
 
-        ((ManagedConnectionFactoryImpl)connectionFactory).setConnectionTracingEvents(null);
+        ((ManagedConnectionFactoryImpl) connectionFactory).setConnectionTracingEvents(null);
 
         HashSet<ManagedConnection> managedConnections = new HashSet<ManagedConnection>();
-        for (int i=0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             ConnectionRequestInfo cxInfo = mock(ConnectionRequestInfo.class);
-            managedConnections.add(connectionFactory.createManagedConnection(null,cxInfo));
+            managedConnections.add(connectionFactory.createManagedConnection(null, cxInfo));
         }
         ManagedConnection nullSecurityConnection = connectionFactory.createManagedConnection(null, null);
         managedConnections.add(nullSecurityConnection);
@@ -89,12 +89,12 @@ public class ManagedConnectionFactoryImplTest extends HazelcastTestSupport {
     public void testShouldReturnNullWhenThereIsNoInstanceOfThisResourceAdapter() throws ResourceException {
         ResourceAdapterImpl mockResourceAdapter = mock(ResourceAdapterImpl.class);
         when(mockResourceAdapter.getHazelcastInstance()).thenReturn(null);
-        ((ManagedConnectionFactoryImpl)connectionFactory).setResourceAdapter(mockResourceAdapter);
+        ((ManagedConnectionFactoryImpl) connectionFactory).setResourceAdapter(mockResourceAdapter);
 
-        ((ManagedConnectionFactoryImpl)connectionFactory).setConnectionTracingEvents(null);
+        ((ManagedConnectionFactoryImpl) connectionFactory).setConnectionTracingEvents(null);
 
         Set<ManagedConnection> managedConnections = new HashSet<ManagedConnection>();
-        for (int i=0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             managedConnections.add(mock(ManagedConnection.class));
         }
 
@@ -108,10 +108,10 @@ public class ManagedConnectionFactoryImplTest extends HazelcastTestSupport {
             str = str.substring(1);
         }
         if (str.endsWith("]")) {
-            str = str.substring(0,str.length()-1);
+            str = str.substring(0, str.length() - 1);
         }
         String ret[] = str.split(delimiter);
-        for (int i=0; i< ret.length; i++) {
+        for (int i = 0; i < ret.length; i++) {
             ret[i] = ret[i].trim();
         }
         return ret;

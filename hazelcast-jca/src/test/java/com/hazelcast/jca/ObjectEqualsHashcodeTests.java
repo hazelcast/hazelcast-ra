@@ -34,7 +34,7 @@ import static org.mockito.Mockito.mock;
 public class ObjectEqualsHashcodeTests {
 
     @Test
-    public void testResourcAdapterImpl() {
+    public void testResourceAdapterImpl() {
         EqualsVerifier.forClass(ResourceAdapterImpl.class).usingGetClass()
                 //using non-final fields and transient fields in equals should probably get FIXed
                 .suppress(Warning.NONFINAL_FIELDS).suppress(Warning.TRANSIENT_FIELDS).verify();

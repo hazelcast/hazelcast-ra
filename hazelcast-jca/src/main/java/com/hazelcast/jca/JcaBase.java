@@ -16,28 +16,30 @@
 
 package com.hazelcast.jca;
 
-import java.io.PrintWriter;
-import java.util.logging.Level;
-
 import com.hazelcast.logging.ILogger;
 import com.hazelcast.logging.Logger;
+
+import java.io.PrintWriter;
+import java.util.logging.Level;
 
 /**
  * Base class to allow simpler logging according to the JCA specs
  * and the Hazelcast Logging Framework
  */
 public class JcaBase {
+
     /**
      * Class LOGGER from hazelcast's logging framework
      */
     private static final ILogger LOGGER = Logger.getLogger("com.hazelcast.jca");
+
     /**
      * Container's LOGGER
      */
     private PrintWriter logWriter;
 
     /**
-     * Convenient method for {@link log(Level, String, null)}
+     * Convenient method for {@link #log(Level, String, Throwable)}
      *
      * @param logLevel The level to log on
      * @param message  The message to be logged
