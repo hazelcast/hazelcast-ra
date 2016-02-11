@@ -120,55 +120,9 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.apache.geronimo.specs</groupId>-->
-        <!--<artifactId>geronimo-j2ee-connector_1.5_spec</artifactId>-->
-        <!--<version>2.0.0</version>-->
-        <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.hazelcast</groupId>-->
-        <!--<artifactId>hazelcast</artifactId>-->
-        <!--<version>${hazelcast.version}</version>-->
-        <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.atomikos</groupId>-->
-        <!--<artifactId>transactions-jdbc</artifactId>-->
-        <!--<scope>test</scope>-->
-        <!--<version>${atomikos.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.hazelcast</groupId>-->
-        <!--<artifactId>hazelcast</artifactId>-->
-        <!--<scope>test</scope>-->
-        <!--<version>${hazelcast.version}</version>-->
-        <!--<classifier>tests</classifier>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.geronimo.specs</groupId>-->
-        <!--<artifactId>geronimo-jta_1.1_spec</artifactId>-->
-        <!--<scope>test</scope>-->
-        <!--<version>1.1.1</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.hazelcast</groupId>-->
-        <!--<artifactId>hazelcast-client</artifactId>-->
-        <!--<scope>test</scope>-->
-        <!--<version>${hazelcast.version}</version>-->
-        <!--</dependency>-->
     </dependencies>
 
     <build>
-        <!--<testResources>-->
-        <!--<testResource>-->
-        <!--<directory>src/main/rar/META-INF</directory>-->
-        <!--</testResource>-->
-        <!--<testResource>-->
-        <!--<directory>src/test/resources</directory>-->
-        <!--</testResource>-->
-        <!--</testResources>-->
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -179,37 +133,32 @@
                 </configuration>
             </plugin>
 
-            <!--&lt;!&ndash; skip unit test run, tests to be executed during integration-test &ndash;&gt;-->
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-surefire-plugin</artifactId>-->
-            <!--<configuration>-->
-            <!--<skip>true</skip>-->
-            <!--</configuration>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>surefire-it</id>-->
-            <!--<phase>integration-test</phase>-->
-            <!--<goals>-->
-            <!--<goal>test</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-            <!--<skip>false</skip>-->
-            <!--</configuration>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.plugin.version}</version>
+                <configuration combine.self="override">
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <runOrder>failedfirst</runOrder>
+                    <argLine>
+                        -Xms128m -Xmx1G -XX:MaxPermSize=128M
+                        -Dhazelcast.phone.home.enabled=false
+                        -Dhazelcast.mancenter.enabled=false
+                        -Dhazelcast.logging.type=none
+                        -Dhazelcast.test.use.network=false
+                    </argLine>
+                </configuration>
+            </plugin>
 
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-rar-plugin</artifactId>-->
-            <!--<version>${maven.rar.plugin.version}</version>-->
-            <!--<configuration>-->
-            <!--<raXmlFile>src/main/rar/ra.xml</raXmlFile>-->
-            <!--</configuration>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${maven.sonar.plugin.version}</version>
+            </plugin>
+
         </plugins>
     </build>
+
     <profiles>
         <profile>
             <id>checkstyle</id>
@@ -273,7 +222,7 @@
             <properties>
                 <argLine>
                     -Xms128m -Xmx1G -XX:MaxPermSize=128M
-                    -Dhazelcast.phone.home.enabled=false
+                    -Dhazelcast.version.check.enabled=false
                     -Dhazelcast.mancenter.enabled=false
                     -Dhazelcast.logging.type=none
                     -Dhazelcast.test.use.network=false
@@ -285,24 +234,6 @@
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <version>${maven.jacoco.plugin.version}</version>
-                        <configuration>
-                            <excludes>
-                                <exclude>**DummyProperty**</exclude>
-                                <exclude>**DummyEntity**</exclude>
-                                <exclude>**test-hibernate**</exclude>
-                                <exclude>**HibernateStatisticsTestSupport**</exclude>
-                                <exclude>**HibernateTestSupport**</exclude>
-                                <exclude>**RegionFactoryDefaultTest**</exclude>
-                                <exclude>**/client/**Request.*</exclude>
-                            </excludes>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                     </plugin>
 
                     <plugin>
@@ -312,13 +243,6 @@
                         <configuration combine.self="override">
                             <redirectTestOutputToFile>true</redirectTestOutputToFile>
                             <testFailureIgnore>true</testFailureIgnore>
-                            <includes>
-                                <include>**/*.java</include>
-                            </includes>
-                            <groups>com.hazelcast.test.annotation.QuickTest,com.hazelcast.test.annotation.SlowTest</groups>
-                            <excludedGroups>
-                                com.hazelcast.test.annotation.NightlyTest
-                            </excludedGroups>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -387,5 +311,75 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>release-snapshot</id>
+            <properties>
+                <javadoc>true</javadoc>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven.javadoc.plugin.version}</version>
+                        <configuration>
+                            <javaApiLinks>
+                                <property>
+                                    <name>api_1.6</name>
+                                    <value>http://download.oracle.com/javase/1.6.0/docs/api/</value>
+                                </property>
+                                <property>
+                                    <name>api_1.7</name>
+                                    <value>http://download.oracle.com/javase/1.7.0/docs/api/</value>
+                                </property>
+                            </javaApiLinks>
+                            <excludePackageNames>
+                                *.impl:*.internal:*.operations:*.proxy:*.util:com.hazelcast.aws.security:
+                                *.handlermigration:*.client.connection.nio:*.client.console:*.buildutils:
+                                *.client.protocol.generator:*.cluster.client:*.concurrent:*.collection:
+                                *.nio.ascii:*.nio.ssl:*.nio.tcp:*.partition.client:*.transaction.client:
+                                *.core.server:com.hazelcast.instance:com.hazelcast.PlaceHolder
+                            </excludePackageNames>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>master</id>
+            <properties>
+                <hazelcast.version>3.7-SNAPSHOT</hazelcast.version>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven.surefire.plugin.version}</version>
+                        <configuration combine.self="override">
+                            <parallel>none</parallel>
+                            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                            <argLine>-Xms128m -Xmx1G -XX:MaxPermSize=128M
+                                -Dhazelcast.phone.home.enabled=false
+                                -Dhazelcast.mancenter.enabled=false
+                                -Dhazelcast.logging.type=none
+                                -Dhazelcast.test.use.network=true
+                            </argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 </project>
