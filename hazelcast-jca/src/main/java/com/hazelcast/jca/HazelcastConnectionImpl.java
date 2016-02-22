@@ -70,7 +70,7 @@ import java.util.logging.Level;
 /**
  * Implementation class of {@link com.hazelcast.jca.HazelcastConnectionImpl}
  */
-@SuppressWarnings({"checkstyle:methodcount", "checkstyle:classfanoutcomplexity" })
+@SuppressWarnings({"checkstyle:methodcount", "checkstyle:classfanoutcomplexity"})
 public class HazelcastConnectionImpl implements HazelcastConnection {
 
     /**
