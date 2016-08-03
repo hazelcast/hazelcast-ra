@@ -13,16 +13,16 @@
 
 # Integrating into J2EE
 
-You can integrate Hazelcast into J2EE containers via the Hazelcast Resource Adapter (`hazelcast-jca-rar-`*version*`.rar`). After a proper configuration, Hazelcast can participate in standard J2EE transactions.
+You can integrate Hazelcast into J2EE containers via the Hazelcast Resource Adapter (`hazelcast-jca-rar-<version>.rar`). After a proper configuration, Hazelcast can participate in standard J2EE transactions.
 
 ```java
-<%@page import="javax.resource.ResourceException" %>
-<%@page import="javax.transaction.*" %>
-<%@page import="javax.naming.*" %>
-<%@page import="javax.resource.cci.*" %>
-<%@page import="java.util.*" %>
-<%@page import="com.hazelcast.core.*" %>
-<%@page import="com.hazelcast.jca.*" %>
+<%@page import="javax.resource.ResourceException"%>
+<%@page import="javax.transaction.*"%>
+<%@page import="javax.naming.*"%>
+<%@page import="javax.resource.cci.*"%>
+<%@page import="java.util.*"%>
+<%@page import="com.hazelcast.core.*"%>
+<%@page import="com.hazelcast.jca.*"%>
 
 <%
 UserTransaction txn = null;
