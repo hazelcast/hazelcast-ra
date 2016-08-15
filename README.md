@@ -249,6 +249,11 @@ public class ExampleBean implements ExampleInterface {
     }
 }
 ```
+### Using a Hazelcast Client Instance
+
+By default the JCA starts a new Hazelcast Server Instance. If this is not necessary, a Hazelcast Client instance can be used instead. 
+
+To use a Hazelcast Client, modify the ```client``` property in the ra.xml file so its set to true. Also please make sure to configure a correct hazelcast client config file.
 
 # Known Issues
 

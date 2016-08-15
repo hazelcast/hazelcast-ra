@@ -16,6 +16,8 @@
 
 package com.hazelcast.jca;
 
+import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.client.config.XmlClientConfigBuilder;
 import com.hazelcast.config.ConfigBuilder;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
@@ -29,6 +31,7 @@ import javax.resource.spi.ResourceAdapterInternalException;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.xa.XAResource;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -53,6 +56,10 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * The configured hazelcast configuration location
      */
     private String configurationLocation;
+    /**
+     * Indicates whether to create a Hazelcast Client Instance
+     */
+    private Boolean client = Boolean.FALSE;
 
     /**
      * Identity
@@ -91,9 +98,15 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * @see javax.resource.spi.ResourceAdapter#start(javax.resource.spi.BootstrapContext)
      */
     public void start(BootstrapContext ctx) throws ResourceAdapterInternalException {
-        // Gets/creates the hazelcast instance
-        ConfigBuilder config = buildConfiguration();
-        hazelcastInstance = Hazelcast.newHazelcastInstance(config.build());
+        if (client != null && client) {
+            // Creates the hazelcast client instance
+            XmlClientConfigBuilder configBuilder = buildClientConfiguration();
+            hazelcastInstance = HazelcastClient.newHazelcastClient(configBuilder.build());
+        } else {
+            // Gets/creates the hazelcast instance
+            ConfigBuilder config = buildConfiguration();
+            hazelcastInstance = Hazelcast.newHazelcastInstance(config.build());
+        }
     }
 
     /**
@@ -114,6 +127,27 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
             }
         }
         return config;
+    }
+
+    /**
+     * Creates a hazelcast client configuration based on the {@link #getConfigurationLocation()}
+     *
+     * @return the created hazelcast client configuration
+     * @throws ResourceAdapterInternalException If there was a problem with the configuration creation
+     */
+    private XmlClientConfigBuilder buildClientConfiguration()
+            throws ResourceAdapterInternalException {
+       XmlClientConfigBuilder configBuilder;
+        if (configurationLocation == null || configurationLocation.length() == 0) {
+           configBuilder = new XmlClientConfigBuilder();
+        } else {
+            try {
+               configBuilder = new XmlClientConfigBuilder(configurationLocation);
+            } catch (IOException e) {
+                throw new ResourceAdapterInternalException(e.getMessage(), e);
+            }
+        }
+        return configBuilder;
     }
 
     /* (non-Javadoc)
@@ -155,6 +189,22 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      */
     public void setConfigurationLocation(String configurationLocation) {
         this.configurationLocation = configurationLocation;
+    }
+
+    /**
+     * @return True if client mode is enabled.
+     */
+    public Boolean isClient() {
+        return client;
+    }
+
+    /**
+     * Called by the container. Sets whether client mode is enabled.
+     *
+     * @param client True if client mode is enabled.
+     */
+    public void setClient(Boolean client) {
+       this.client = client;
     }
 
     @Deprecated

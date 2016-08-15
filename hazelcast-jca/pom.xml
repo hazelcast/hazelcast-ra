@@ -103,7 +103,6 @@
                             <includes>
                                 <include>**/AbstractDeploymentTest/*</include>
                                 <include>**/TestInContainer*</include>
-
                                 <exclude>**/XATransactionTest*</exclude>
                             </includes>
                         </configuration>
@@ -130,7 +129,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-client</artifactId>
-            <scope>test</scope>
+            <scope>provided</scope>
             <version>${hazelcast.version}</version>
         </dependency>
 
