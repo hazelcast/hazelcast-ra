@@ -1,6 +1,7 @@
 # Table of Contents
 
-* [Integrating into J2EE](#integrating-into-j2ee)
+* [Getting Started](#getting-started)
+* [Integrating into J2EE](#integrating-hazelcast-into-j2ee)
 * [Sample Code for J2EE Integration](#sample-code-for-j2ee-integration)
 * [Configuring Resource Adapter](#configuring-resource-adapter)
 * [Configuring a Glassfish v3 Web Application](#configuring-a-glassfish-v3-web-application)
@@ -11,7 +12,12 @@
 * [Known Issues](#known-issues)
 
 
-# Integrating into J2EE
+# Getting Started
+
+Hazelcast JCA resource adapter is a system-level software driver used by a Java application to connect to an Hazelcast Cluster.
+please see releases prior to v3.7 on [hazelcast main repository](https://github.com/hazelcast/hazelcast). As of hazelcast-ra v3.7, hazelcast-ra module has its own release cycle with initial release of [v3.7](https://github.com/hazelcast/hazelcast-ra/releases/tag/v3.7)
+
+# Integrating Hazelcast into J2EE
 
 You can integrate Hazelcast into J2EE containers via the Hazelcast Resource Adapter (`hazelcast-jca-rar-<version>.rar`). After a proper configuration, Hazelcast can participate in standard J2EE transactions.
 
