@@ -15,7 +15,10 @@
 # Getting Started
 
 Hazelcast JCA resource adapter is a system-level software driver used by a Java application to connect to an Hazelcast Cluster.
-please see releases prior to v3.7 on [hazelcast main repository](https://github.com/hazelcast/hazelcast). As of hazelcast-ra v3.7, hazelcast-ra module has its own release cycle with initial release of [v3.7](https://github.com/hazelcast/hazelcast-ra/releases/tag/v3.7)
+
+please see releases prior to v3.7 on [hazelcast main repository](https://github.com/hazelcast/hazelcast). 
+
+As of hazelcast-ra v3.7, hazelcast-ra module has its own release cycle with initial release of [v3.7](https://github.com/hazelcast/hazelcast-ra/releases/tag/v3.7)
 
 # Integrating Hazelcast into J2EE
 
