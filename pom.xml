@@ -22,7 +22,7 @@
     <name>hazelcast-ra</name>
     <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast-ra</artifactId>
-    <version>3.7-SNAPSHOT</version>
+    <version>3.7</version>
     <packaging>pom</packaging>
     <description>Hazelcast In-Memory DataGrid Ra Plugin</description>
     <url>http://www.hazelcast.com/</url>
