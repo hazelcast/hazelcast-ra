@@ -163,7 +163,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
     /**
      * Provides access to the underlying hazelcast instance
      */
-    HazelcastInstance getHazelcastInstance() {
+    public HazelcastInstance getHazelcastInstance() {
         return hazelcastInstance;
     }
 
