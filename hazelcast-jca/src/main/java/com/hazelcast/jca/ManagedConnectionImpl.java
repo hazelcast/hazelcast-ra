@@ -139,7 +139,7 @@ public class ManagedConnectionImpl extends JcaBase implements ManagedConnection 
         return cxRequestInfo;
     }
 
-    HazelcastInstance getHazelcastInstance() {
+    public HazelcastInstance getHazelcastInstance() {
         return hazelcastInstance;
     }
 
