@@ -1,8 +1,8 @@
 # Table of Contents
 
 * [Getting Started](#getting-started)
-* [Integrating into J2EE](#integrating-hazelcast-into-j2ee)
-* [Sample Code for J2EE Integration](#sample-code-for-j2ee-integration)
+* [Integrating into Java EE](#integrating-hazelcast-into-java-ee)
+* [Sample Code for Java EE Integration](#sample-code-for-java-ee-integration)
 * [Configuring Resource Adapter](#configuring-resource-adapter)
 * [Configuring a Glassfish v3 Web Application](#configuring-a-glassfish-v3-web-application)
 * [Configuring a JBoss AS 5 Web Application](#configuring-a-jboss-as-5-web-application)
@@ -20,9 +20,9 @@ please see releases prior to v3.7 on [hazelcast main repository](https://github.
 
 As of hazelcast-ra v3.7, hazelcast-ra module has its own release cycle with initial release of [v3.7](https://github.com/hazelcast/hazelcast-ra/releases/tag/v3.7)
 
-# Integrating Hazelcast into J2EE
+# Integrating Hazelcast into Java EE
 
-You can integrate Hazelcast into J2EE containers via the Hazelcast Resource Adapter (`hazelcast-jca-rar-<version>.rar`). After a proper configuration, Hazelcast can participate in standard J2EE transactions.
+You can integrate Hazelcast into Java EE containers via the Hazelcast Resource Adapter (`hazelcast-jca-rar-<version>.rar`). After a proper configuration, Hazelcast can participate in standard Java EE transactions.
 
 ```java
 <%@page import="javax.resource.ResourceException"%>
@@ -79,16 +79,16 @@ Assume that Hazelcast is embedded in a container and you want to run your own `R
 You need to tell Hazelcast to use a specified class loader to lookup classes internally. A sample code line for this could be `config.setClassLoader(getClass().getClassLoader())`. 
 
 
-# Sample Code for J2EE Integration
+# Sample Code for Java EE Integration
 
-Please see our sample application for <a href="https://github.com/hazelcast/hazelcast-code-samples/tree/master/hazelcast-integration/jca-ra" target="_blank">J2EE Integration</a>.
+Please see our sample application for <a href="https://github.com/hazelcast/hazelcast-code-samples/tree/master/hazelcast-integration/jca-ra" target="_blank">Java EE Integration</a>.
 
 
 
 
 # Configuring Resource Adapter
 
-Deploying and configuring the Hazelcast resource adapter is no different than configuring any other resource adapter since the Hazelcast resource adapter is a standard JCA one. However, resource adapter installation and configuration is container-specific, so please consult your J2EE vendor documentation for details. The most common steps are:
+Deploying and configuring the Hazelcast resource adapter is no different than configuring any other resource adapter since the Hazelcast resource adapter is a standard JCA one. However, resource adapter installation and configuration is container-specific, so please consult your Java EE vendor documentation for details. The most common steps are:
 
 1. Add the `hazelcast-`*version*`.jar` and `hazelcast-jca-`*version*`.jar` to the container's classpath. Usually there is a lib directory that is loaded automatically by the container on startup.
 2. Deploy `hazelcast-jca-rar-`*version*`.rar`. Usually there is some kind of a deploy directory. The name of the directory varies by container.
