@@ -23,11 +23,11 @@ import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
+import javax.naming.NamingException;
+import javax.naming.Reference;
+import javax.resource.Referenceable;
 import javax.resource.ResourceException;
-import javax.resource.spi.ActivationSpec;
-import javax.resource.spi.BootstrapContext;
-import javax.resource.spi.ResourceAdapter;
-import javax.resource.spi.ResourceAdapterInternalException;
+import javax.resource.spi.*;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.xa.XAResource;
 import java.io.FileNotFoundException;
@@ -39,7 +39,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  * This is the starting point of the whole resource adapter for hazelcast.
  * The hazelcast instance is created/fetched in this class
  */
-public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
+@Connector(
+        description = ConnectorConstants.ADAPTER_SHORT_DESCRIPTION,
+        displayName = ConnectorConstants.ADAPTER_NAME,
+        vendorName = ConnectorConstants.ADAPTER_VENDOR_NAME,
+        eisType = ConnectorConstants.ADAPTER_EIS_TYPE,
+        licenseDescription = ConnectorConstants.ADAPTER_LICENSE_DESCRIPTION,
+        licenseRequired = ConnectorConstants.ADAPTER_LICENSE_REQUIRED,
+        transactionSupport = TransactionSupport.TransactionSupportLevel.XATransaction,
+        version = ConnectorConstants.ADAPTER_VERSION )
+public class ResourceAdapterImpl implements ResourceAdapter, Referenceable, Serializable {
 
     /**
      * Identity generator
@@ -52,13 +61,22 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * The hazelcast instance itself
      */
     private transient volatile HazelcastInstance hazelcastInstance;
+
+    /**
+     * The Reference instance provided to support Referenceable interface.
+     */
+    private Reference reference;
+
     /**
      * The configured hazelcast configuration location
      */
+    @ConfigProperty( description = "Location of the hazelcast.xml file (Client or Server)" )
     private String configurationLocation;
+
     /**
      * Indicates whether to create a Hazelcast Client Instance
      */
+    @ConfigProperty( description = "Create a Hazelcast Client Instance? Defaults to false (Server)" )
     private Boolean client = Boolean.FALSE;
 
     /**
@@ -74,6 +92,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * @see javax.resource.spi.ResourceAdapter
      * #endpointActivation(javax.resource.spi.endpoint.MessageEndpointFactory, javax.resource.spi.ActivationSpec)
      */
+    @Override
     public void endpointActivation(MessageEndpointFactory endpointFactory, ActivationSpec spec)
             throws ResourceException {
     }
@@ -82,6 +101,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * @see javax.resource.spi.ResourceAdapter
      * #endpointDeactivation(javax.resource.spi.endpoint.MessageEndpointFactory, javax.resource.spi.ActivationSpec)
      */
+    @Override
     public void endpointDeactivation(MessageEndpointFactory endpointFactory, ActivationSpec spec) {
     }
 
@@ -89,6 +109,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * @see javax.resource.spi.ResourceAdapter
      * #getXAResources(javax.resource.spi.ActivationSpec[])
      */
+    @Override
     public XAResource[] getXAResources(ActivationSpec[] specs) throws ResourceException {
         //JBoss is fine with null, weblogic requires an empty array
         return new XAResource[0];
@@ -97,6 +118,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
     /* (non-Javadoc)
      * @see javax.resource.spi.ResourceAdapter#start(javax.resource.spi.BootstrapContext)
      */
+    @Override
     public void start(BootstrapContext ctx) throws ResourceAdapterInternalException {
         if (client != null && client) {
             // Creates the hazelcast client instance
@@ -153,6 +175,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
     /* (non-Javadoc)
      * @see javax.resource.spi.ResourceAdapter#stop()
      */
+    @Override
     public void stop() {
         HazelcastInstance instance = hazelcastInstance;
         if (instance != null) {
@@ -173,6 +196,28 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      */
     public void setHazelcastInstance(HazelcastInstance hazelcast) {
         this.hazelcastInstance = hazelcast;
+    }
+
+    /**
+     * @see javax.resource.Referenceable
+     */
+    @Override
+    public Reference getReference() throws NamingException
+    {
+        if( reference == null )    // API contract says we can not return null
+        {
+            throw new NamingException( "reference has not been set" );
+        }
+        return reference;
+    }
+
+    /**
+     * @see javax.resource.Referenceable
+     */
+    @Override
+    public void setReference(/*@Nonnull*/ Reference reference )
+    {
+        this.reference = reference;
     }
 
     /**

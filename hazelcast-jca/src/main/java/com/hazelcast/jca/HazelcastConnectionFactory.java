@@ -30,11 +30,13 @@ public interface HazelcastConnectionFactory extends ConnectionFactory {
      * @return access to the real bridging object to access Hazelcast's infrastructure
      * @see HazelcastConnection
      */
+    @Override
     HazelcastConnection getConnection() throws ResourceException;
 
     /**
      * @return access to the real bridging object to access Hazelcast's infrastructure
      * @see HazelcastConnection
      */
+    @Override
     HazelcastConnection getConnection(ConnectionSpec connSpec) throws ResourceException;
 }
