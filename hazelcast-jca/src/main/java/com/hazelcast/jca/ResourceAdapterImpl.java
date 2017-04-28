@@ -27,7 +27,13 @@ import javax.naming.NamingException;
 import javax.naming.Reference;
 import javax.resource.Referenceable;
 import javax.resource.ResourceException;
-import javax.resource.spi.*;
+import javax.resource.spi.ActivationSpec;
+import javax.resource.spi.BootstrapContext;
+import javax.resource.spi.ConfigProperty;
+import javax.resource.spi.Connector;
+import javax.resource.spi.ResourceAdapter;
+import javax.resource.spi.ResourceAdapterInternalException;
+import javax.resource.spi.TransactionSupport;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.xa.XAResource;
 import java.io.FileNotFoundException;
@@ -40,14 +46,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * The hazelcast instance is created/fetched in this class
  */
 @Connector(
-        description = ConnectorConstants.ADAPTER_SHORT_DESCRIPTION,
-        displayName = ConnectorConstants.ADAPTER_NAME,
-        vendorName = ConnectorConstants.ADAPTER_VENDOR_NAME,
-        eisType = ConnectorConstants.ADAPTER_EIS_TYPE,
-        licenseDescription = ConnectorConstants.ADAPTER_LICENSE_DESCRIPTION,
-        licenseRequired = ConnectorConstants.ADAPTER_LICENSE_REQUIRED,
+        description = "Hazelcast JCA Connection",
+        displayName = "Hazelcast",
+        vendorName = "Hazelcast.com",
+        eisType = "Hazelcast",
+        licenseDescription = "Copyright (c) 2008-2017, Hazelcast, Inc. All Rights Reserved.",
+        licenseRequired = true,
         transactionSupport = TransactionSupport.TransactionSupportLevel.XATransaction,
-        version = ConnectorConstants.ADAPTER_VERSION )
+        version = "3.8")
 public class ResourceAdapterImpl implements ResourceAdapter, Referenceable, Serializable {
 
     /**
@@ -70,13 +76,13 @@ public class ResourceAdapterImpl implements ResourceAdapter, Referenceable, Seri
     /**
      * The configured hazelcast configuration location
      */
-    @ConfigProperty( description = "Location of the hazelcast.xml file (Client or Server)" )
+    @ConfigProperty(description = "Location of the hazelcast.xml file (Client or Server)")
     private String configurationLocation;
 
     /**
      * Indicates whether to create a Hazelcast Client Instance
      */
-    @ConfigProperty( description = "Create a Hazelcast Client Instance? Defaults to false (Server)" )
+    @ConfigProperty(description = "Create a Hazelcast Client Instance? Defaults to false (Server)")
     private Boolean client = Boolean.FALSE;
 
     /**
@@ -159,12 +165,12 @@ public class ResourceAdapterImpl implements ResourceAdapter, Referenceable, Seri
      */
     private XmlClientConfigBuilder buildClientConfiguration()
             throws ResourceAdapterInternalException {
-       XmlClientConfigBuilder configBuilder;
+        XmlClientConfigBuilder configBuilder;
         if (configurationLocation == null || configurationLocation.length() == 0) {
-           configBuilder = new XmlClientConfigBuilder();
+            configBuilder = new XmlClientConfigBuilder();
         } else {
             try {
-               configBuilder = new XmlClientConfigBuilder(configurationLocation);
+                configBuilder = new XmlClientConfigBuilder(configurationLocation);
             } catch (IOException e) {
                 throw new ResourceAdapterInternalException(e.getMessage(), e);
             }
@@ -202,11 +208,10 @@ public class ResourceAdapterImpl implements ResourceAdapter, Referenceable, Seri
      * @see javax.resource.Referenceable
      */
     @Override
-    public Reference getReference() throws NamingException
-    {
-        if( reference == null )    // API contract says we can not return null
-        {
-            throw new NamingException( "reference has not been set" );
+    public Reference getReference() throws NamingException {
+        // API contract says we can not return null
+        if (reference == null) {
+            throw new NamingException("reference has not been set");
         }
         return reference;
     }
@@ -215,8 +220,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Referenceable, Seri
      * @see javax.resource.Referenceable
      */
     @Override
-    public void setReference(/*@Nonnull*/ Reference reference )
-    {
+    public void setReference(/*@Nonnull*/ Reference reference) {
         this.reference = reference;
     }
 
@@ -249,7 +253,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Referenceable, Seri
      * @param client True if client mode is enabled.
      */
     public void setClient(Boolean client) {
-       this.client = client;
+        this.client = client;
     }
 
     @Deprecated

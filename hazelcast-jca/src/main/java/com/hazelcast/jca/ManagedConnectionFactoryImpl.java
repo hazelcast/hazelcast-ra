@@ -20,7 +20,14 @@ import javax.naming.NamingException;
 import javax.naming.Reference;
 import javax.resource.Referenceable;
 import javax.resource.ResourceException;
-import javax.resource.spi.*;
+import javax.resource.spi.ConfigProperty;
+import javax.resource.spi.ConnectionDefinition;
+import javax.resource.spi.ConnectionManager;
+import javax.resource.spi.ConnectionRequestInfo;
+import javax.resource.spi.ManagedConnection;
+import javax.resource.spi.ManagedConnectionFactory;
+import javax.resource.spi.ResourceAdapter;
+import javax.resource.spi.ResourceAdapterAssociation;
 import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -43,8 +50,9 @@ import static java.util.Collections.emptySet;
         connectionFactory = HazelcastConnectionFactory.class,
         connectionFactoryImpl = ConnectionFactoryImpl.class,
         connection = HazelcastConnection.class,
-        connectionImpl = HazelcastConnectionImpl.class )
-public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConnectionFactory, Referenceable, ResourceAdapterAssociation {
+        connectionImpl = HazelcastConnectionImpl.class)
+public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConnectionFactory, Referenceable,
+        ResourceAdapterAssociation {
 
     private static final long serialVersionUID = -4889598421534961926L;
 
@@ -70,8 +78,8 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      *
      * @see HzConnectionEvent
      */
-    @ConfigProperty( type = String.class, description = "Comma separated list of FACTORY_INIT, CREATE, TX_START, TX_COMPLETE, CLEANUP " +
-            "and DESTROY to trace connection events" )
+    @ConfigProperty(type = String.class, description = "Comma separated list of FACTORY_INIT, CREATE, TX_START, "
+            + "TX_COMPLETE, CLEANUP and DESTROY to trace connection events")
     private Set<HzConnectionEvent> hzConnectionTracingEvents;
 
     /**
@@ -98,7 +106,8 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      */
     @Override
     public HazelcastConnectionFactory createConnectionFactory(ConnectionManager cm) throws ResourceException {
-        log(Level.FINEST, "createConnectionFactory cm: " + cm);
+        log(Level.FINEST, "createConnectionFactory cm: "
+                + cm);
         logHzConnectionEvent(this, HzConnectionEvent.FACTORY_INIT);
         return new ConnectionFactoryImpl(this, cm);
     }
@@ -165,11 +174,10 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      * @see javax.resource.Referenceable
      */
     @Override
-    public Reference getReference() throws NamingException
-    {
-        if( reference == null )    // API contract says we can not return null
-        {
-            throw new NamingException( "reference has not been set" );
+    public Reference getReference() throws NamingException {
+        // API contract says we can not return null
+        if (reference == null) {
+            throw new NamingException("reference has not been set");
         }
         return reference;
     }
@@ -178,8 +186,7 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      * @see javax.resource.Referenceable
      */
     @Override
-    public void setReference(/*@Nonnull*/ Reference reference )
-    {
+    public void setReference(/*@Nonnull*/ Reference reference) {
         this.reference = reference;
     }
 
