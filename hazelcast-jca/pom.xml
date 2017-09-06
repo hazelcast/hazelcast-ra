@@ -140,6 +140,21 @@
         </dependency>
 
         <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- TODO wildfly10: add support for JCache
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        -->
+
+        <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
             <version>1.0-SP1</version>
@@ -171,6 +186,8 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- FIXME wildfly10: replaced by javaee-api 7.0 -->
+        <!--
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-j2ee-connector_1.5_spec</artifactId>
@@ -183,5 +200,6 @@
             <scope>test</scope>
             <version>1.1.1</version>
         </dependency>
+        -->
     </dependencies>
 </project>

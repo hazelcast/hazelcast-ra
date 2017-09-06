@@ -16,7 +16,12 @@
 
 package com.hazelcast.jca;
 
+import javax.naming.NamingException;
+import javax.naming.Reference;
+import javax.resource.Referenceable;
 import javax.resource.ResourceException;
+import javax.resource.spi.ConfigProperty;
+import javax.resource.spi.ConnectionDefinition;
 import javax.resource.spi.ConnectionManager;
 import javax.resource.spi.ConnectionRequestInfo;
 import javax.resource.spi.ManagedConnection;
@@ -37,11 +42,17 @@ import static java.util.Collections.emptySet;
  * This managed connection factory is populated with all
  * container-specific configuration and infrastructure
  *
- * @see #setConnectionTracingDetail(boolean)
+ * @see #setConnectionTracingDetail(Boolean)
  * @see #setConnectionTracingEvents(String)
  * @see #setResourceAdapter(ResourceAdapter)
  */
-public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConnectionFactory, ResourceAdapterAssociation {
+@ConnectionDefinition(
+        connectionFactory = HazelcastConnectionFactory.class,
+        connectionFactoryImpl = ConnectionFactoryImpl.class,
+        connection = HazelcastConnection.class,
+        connectionImpl = HazelcastConnectionImpl.class)
+public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConnectionFactory, Referenceable,
+        ResourceAdapterAssociation {
 
     private static final long serialVersionUID = -4889598421534961926L;
 
@@ -60,11 +71,15 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      */
     private ResourceAdapterImpl resourceAdapter;
 
+    private Reference reference;
+
     /**
      * Definies which events should be traced
      *
      * @see HzConnectionEvent
      */
+    @ConfigProperty(type = String.class, description = "Comma separated list of FACTORY_INIT, CREATE, TX_START, "
+            + "TX_COMPLETE, CLEANUP and DESTROY to trace connection events")
     private Set<HzConnectionEvent> hzConnectionTracingEvents;
 
     /**
@@ -72,7 +87,7 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      *
      * @see #hzConnectionTracingEvents
      */
-    private boolean connectionTracingDetail;
+    private Boolean connectionTracingDetail;
 
     public ManagedConnectionFactoryImpl() {
         setId(ID_GEN.incrementAndGet());
@@ -81,6 +96,7 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
     /* (non-Javadoc)
      * @see javax.resource.spi.ManagedConnectionFactory#createConnectionFactory()
      */
+    @Override
     public HazelcastConnectionFactory createConnectionFactory() throws ResourceException {
         return createConnectionFactory(null);
     }
@@ -88,8 +104,10 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
     /* (non-Javadoc)
      * @see javax.resource.spi.ManagedConnectionFactory#createConnectionFactory(javax.resource.spi.ConnectionManager)
      */
+    @Override
     public HazelcastConnectionFactory createConnectionFactory(ConnectionManager cm) throws ResourceException {
-        log(Level.FINEST, "createConnectionFactory cm: " + cm);
+        log(Level.FINEST, "createConnectionFactory cm: "
+                + cm);
         logHzConnectionEvent(this, HzConnectionEvent.FACTORY_INIT);
         return new ConnectionFactoryImpl(this, cm);
     }
@@ -98,6 +116,7 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      * @see javax.resource.spi.ManagedConnectionFactory
      * #createManagedConnection(javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
      */
+    @Override
     public ManagedConnection createManagedConnection(Subject subject, ConnectionRequestInfo cxRequestInfo)
             throws ResourceException {
         log(Level.FINEST, "createManagedConnection");
@@ -116,20 +135,21 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      * Setter for the RAR property 'connectionTracingDetails'.
      * This method is called by the container
      */
-    public void setConnectionTracingDetail(boolean connectionTracingDetail) {
+    public void setConnectionTracingDetail(Boolean connectionTracingDetail) {
         this.connectionTracingDetail = connectionTracingDetail;
     }
 
     /**
      * Getter for the RAR property 'connectionTracingDetails'
      */
-    public boolean isConnectionTracingDetail() {
+    public Boolean isConnectionTracingDetail() {
         return connectionTracingDetail;
     }
 
     /* (non-Javadoc)
      * @see javax.resource.spi.ResourceAdapterAssociation#getResourceAdapter()
      */
+    @Override
     public ResourceAdapterImpl getResourceAdapter() {
         return resourceAdapter;
     }
@@ -137,6 +157,7 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
     /* (non-Javadoc)
      * @see javax.resource.spi.ResourceAdapterAssociation#setResourceAdapter(javax.resource.spi.ResourceAdapter)
      */
+    @Override
     public void setResourceAdapter(ResourceAdapter resourceAdapter) throws ResourceException {
         assert resourceAdapter != null;
 
@@ -144,9 +165,29 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
             this.resourceAdapter = (ResourceAdapterImpl) resourceAdapter;
         } else {
             throw new ResourceException(resourceAdapter
-                    + " is not the expected ResoruceAdapterImpl but "
+                    + " is not the expected ResourceAdapterImpl but "
                     + resourceAdapter.getClass());
         }
+    }
+
+    /**
+     * @see javax.resource.Referenceable
+     */
+    @Override
+    public Reference getReference() throws NamingException {
+        // API contract says we can not return null
+        if (reference == null) {
+            throw new NamingException("reference has not been set");
+        }
+        return reference;
+    }
+
+    /**
+     * @see javax.resource.Referenceable
+     */
+    @Override
+    public void setReference(/*@Nonnull*/ Reference reference) {
+        this.reference = reference;
     }
 
     /**
@@ -176,6 +217,7 @@ public class ManagedConnectionFactoryImpl extends JcaBase implements ManagedConn
      * @see javax.resource.spi.ManagedConnectionFactory
      * #matchManagedConnections(java.util.Set, javax.security.auth.Subject, javax.resource.spi.ConnectionRequestInfo)
      */
+    @Override
     public ManagedConnection matchManagedConnections(@SuppressWarnings("rawtypes") Set connectionSet, Subject subject,
                                                      ConnectionRequestInfo cxRequestInfo) throws ResourceException {
         log(Level.FINEST, "matchManagedConnections");

@@ -23,11 +23,17 @@ import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
+import javax.naming.NamingException;
+import javax.naming.Reference;
+import javax.resource.Referenceable;
 import javax.resource.ResourceException;
 import javax.resource.spi.ActivationSpec;
 import javax.resource.spi.BootstrapContext;
+import javax.resource.spi.ConfigProperty;
+import javax.resource.spi.Connector;
 import javax.resource.spi.ResourceAdapter;
 import javax.resource.spi.ResourceAdapterInternalException;
+import javax.resource.spi.TransactionSupport;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.xa.XAResource;
 import java.io.FileNotFoundException;
@@ -39,7 +45,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  * This is the starting point of the whole resource adapter for hazelcast.
  * The hazelcast instance is created/fetched in this class
  */
-public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
+@Connector(
+        description = "Hazelcast JCA Connection",
+        displayName = "Hazelcast",
+        vendorName = "Hazelcast.com",
+        eisType = "Hazelcast",
+        licenseDescription = "Copyright (c) 2008-2017, Hazelcast, Inc. All Rights Reserved.",
+        licenseRequired = true,
+        transactionSupport = TransactionSupport.TransactionSupportLevel.XATransaction,
+        version = "3.8")
+public class ResourceAdapterImpl implements ResourceAdapter, Referenceable, Serializable {
 
     /**
      * Identity generator
@@ -52,13 +67,22 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * The hazelcast instance itself
      */
     private transient volatile HazelcastInstance hazelcastInstance;
+
+    /**
+     * The Reference instance provided to support Referenceable interface.
+     */
+    private Reference reference;
+
     /**
      * The configured hazelcast configuration location
      */
+    @ConfigProperty(description = "Location of the hazelcast.xml file (Client or Server)")
     private String configurationLocation;
+
     /**
      * Indicates whether to create a Hazelcast Client Instance
      */
+    @ConfigProperty(description = "Create a Hazelcast Client Instance? Defaults to false (Server)")
     private Boolean client = Boolean.FALSE;
 
     /**
@@ -74,6 +98,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * @see javax.resource.spi.ResourceAdapter
      * #endpointActivation(javax.resource.spi.endpoint.MessageEndpointFactory, javax.resource.spi.ActivationSpec)
      */
+    @Override
     public void endpointActivation(MessageEndpointFactory endpointFactory, ActivationSpec spec)
             throws ResourceException {
     }
@@ -82,6 +107,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * @see javax.resource.spi.ResourceAdapter
      * #endpointDeactivation(javax.resource.spi.endpoint.MessageEndpointFactory, javax.resource.spi.ActivationSpec)
      */
+    @Override
     public void endpointDeactivation(MessageEndpointFactory endpointFactory, ActivationSpec spec) {
     }
 
@@ -89,6 +115,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * @see javax.resource.spi.ResourceAdapter
      * #getXAResources(javax.resource.spi.ActivationSpec[])
      */
+    @Override
     public XAResource[] getXAResources(ActivationSpec[] specs) throws ResourceException {
         //JBoss is fine with null, weblogic requires an empty array
         return new XAResource[0];
@@ -97,6 +124,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
     /* (non-Javadoc)
      * @see javax.resource.spi.ResourceAdapter#start(javax.resource.spi.BootstrapContext)
      */
+    @Override
     public void start(BootstrapContext ctx) throws ResourceAdapterInternalException {
         if (client != null && client) {
             // Creates the hazelcast client instance
@@ -137,12 +165,12 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      */
     private XmlClientConfigBuilder buildClientConfiguration()
             throws ResourceAdapterInternalException {
-       XmlClientConfigBuilder configBuilder;
+        XmlClientConfigBuilder configBuilder;
         if (configurationLocation == null || configurationLocation.length() == 0) {
-           configBuilder = new XmlClientConfigBuilder();
+            configBuilder = new XmlClientConfigBuilder();
         } else {
             try {
-               configBuilder = new XmlClientConfigBuilder(configurationLocation);
+                configBuilder = new XmlClientConfigBuilder(configurationLocation);
             } catch (IOException e) {
                 throw new ResourceAdapterInternalException(e.getMessage(), e);
             }
@@ -153,6 +181,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
     /* (non-Javadoc)
      * @see javax.resource.spi.ResourceAdapter#stop()
      */
+    @Override
     public void stop() {
         HazelcastInstance instance = hazelcastInstance;
         if (instance != null) {
@@ -173,6 +202,26 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      */
     public void setHazelcastInstance(HazelcastInstance hazelcast) {
         this.hazelcastInstance = hazelcast;
+    }
+
+    /**
+     * @see javax.resource.Referenceable
+     */
+    @Override
+    public Reference getReference() throws NamingException {
+        // API contract says we can not return null
+        if (reference == null) {
+            throw new NamingException("reference has not been set");
+        }
+        return reference;
+    }
+
+    /**
+     * @see javax.resource.Referenceable
+     */
+    @Override
+    public void setReference(/*@Nonnull*/ Reference reference) {
+        this.reference = reference;
     }
 
     /**
@@ -204,7 +253,7 @@ public class ResourceAdapterImpl implements ResourceAdapter, Serializable {
      * @param client True if client mode is enabled.
      */
     public void setClient(Boolean client) {
-       this.client = client;
+        this.client = client;
     }
 
     @Deprecated

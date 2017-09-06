@@ -16,6 +16,7 @@
 
 package com.hazelcast.jca;
 
+import com.hazelcast.cardinality.CardinalityEstimator;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.ClientService;
 import com.hazelcast.core.Cluster;
@@ -25,6 +26,7 @@ import com.hazelcast.core.Endpoint;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IAtomicLong;
 import com.hazelcast.core.IAtomicReference;
+import com.hazelcast.core.ICacheManager;
 import com.hazelcast.core.ICountDownLatch;
 import com.hazelcast.core.IExecutorService;
 import com.hazelcast.core.IList;
@@ -44,10 +46,12 @@ import com.hazelcast.core.TransactionalMap;
 import com.hazelcast.core.TransactionalMultiMap;
 import com.hazelcast.core.TransactionalQueue;
 import com.hazelcast.core.TransactionalSet;
+import com.hazelcast.durableexecutor.DurableExecutorService;
 import com.hazelcast.logging.LoggingService;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.quorum.QuorumService;
 import com.hazelcast.ringbuffer.Ringbuffer;
+import com.hazelcast.scheduledexecutor.IScheduledExecutorService;
 import com.hazelcast.transaction.HazelcastXAResource;
 import com.hazelcast.transaction.TransactionContext;
 import com.hazelcast.transaction.TransactionException;
@@ -304,6 +308,9 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
         return getHazelcastInstance().getRingbuffer(name);
     }
 
+    /**
+     * @deprecated
+     */
     @Override
     public JobTracker getJobTracker(String name) {
         return getHazelcastInstance().getJobTracker(name);
@@ -337,6 +344,26 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
         } catch (ResourceException e) {
             throw ExceptionUtil.rethrow(e);
         }
+    }
+
+    @Override
+    public DurableExecutorService getDurableExecutorService(final String s) {
+        return getHazelcastInstance().getDurableExecutorService(s);
+    }
+
+    @Override
+    public ICacheManager getCacheManager() {
+        return getHazelcastInstance().getCacheManager();
+    }
+
+    @Override
+    public CardinalityEstimator getCardinalityEstimator(final String s) {
+        return getHazelcastInstance().getCardinalityEstimator(s);
+    }
+
+    @Override
+    public IScheduledExecutorService getScheduledExecutorService(final String s) {
+        return getHazelcastInstance().getScheduledExecutorService(s);
     }
 
     // unsupported operations
