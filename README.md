@@ -5,6 +5,7 @@
 * [Sample Code for Java EE Integration](#sample-code-for-java-ee-integration)
 * [Configuring Resource Adapter](#configuring-resource-adapter)
 * [Configuring a Glassfish v3 Web Application](#configuring-a-glassfish-v3-web-application)
+* [Configuring a Wildfly-10.1 Web Application](#configuring-a-wildfly-10.1-web-application)
 * [Configuring a JBoss AS 5 Web Application](#configuring-a-jboss-as-5-web-application)
 * [Configuring a JBoss AS 7 or EAP 6 Web App](#configuring-a-jboss-as-7-or-eap-6-web-application)
   * [Starting JBoss](#starting-jboss)
@@ -120,6 +121,36 @@ Notice that we did not have to put `sun-ra.xml` into the RAR file since it alrea
 
 If the Hazelcast resource is used from EJBs, you should configure `ejb-jar.xml` for resource reference and JNDI definitions, just like for the `web.xml` file.
 
+
+# Configuring a Wildfly-10.1 Web Application
+
+To configure an example Wildfly-10.1 web application: 
+
+- Create the folder `<wildfly_home>/modules/system/layers/base/com/hazelcast/main`.
+- Place the `hazelcast-`<*version*>`.jar`and `hazelcast-jca-`<*version*>`.jar` into the folder you created in the previous step.
+- Create the file `module.xml` and place it in the same folder. This file should have the following content:
+
+```xml
+<module xmlns="urn:jboss:module:1.5" name="com.hazelcast">
+    <resources>
+        <resource-root path="hazelcast-<version>.jar"/>
+        <resource-root path="hazelcast-jca-<version>.jar"/>
+    </resources>
+
+    <dependencies>
+        <module name="javax.api"/>
+        <module name="javax.cache.api"/>
+        <module name="javax.resource.api"/>
+        <module name="javax.transaction.api"/>
+        <module name="org.apache.log4j"/>
+        <module name="sun.jdk"/>
+    </dependencies>
+</module>
+```
+
+Here is the simple example of Hazelcast JCA connection with Wildfly in Docker environment:
+
+https://github.com/hazelcast/hazelcast-docker-samples/tree/master/jca-ra
 
 
 # Configuring a JBoss AS 5 Web Application
