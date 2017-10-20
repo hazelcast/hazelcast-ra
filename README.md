@@ -5,7 +5,7 @@
 * [Sample Code for Java EE Integration](#sample-code-for-java-ee-integration)
 * [Configuring Resource Adapter](#configuring-resource-adapter)
 * [Configuring a Glassfish v3 Web Application](#configuring-a-glassfish-v3-web-application)
-* [Configuring a Wildfly 10.1 Web Application](#configuring-a-wildfly-10.1-web-application)
+* [Configuring a Wildfly 10.1 Web Application](#configuring-a-wildfly-101-web-application)
 * [Configuring a JBoss AS 5 Web Application](#configuring-a-jboss-as-5-web-application)
 * [Configuring a JBoss AS 7 or EAP 6 Web App](#configuring-a-jboss-as-7-or-eap-6-web-application)
   * [Starting JBoss](#starting-jboss)
