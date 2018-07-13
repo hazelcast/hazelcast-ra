@@ -28,9 +28,6 @@ import java.util.logging.Level;
  */
 public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransaction {
 
-    /** List of former transaction used during transaction restore */
-    //private static final ConcurrentMap<CallContext,CallContext> predecessors=new ConcurrentHashMap<CallContext,CallContext>();
-
     /**
      * access to the creator of this {@link #connection}
      */
@@ -46,7 +43,7 @@ public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransa
      */
     private TransactionContext txContext;
 
-    public HazelcastTransactionImpl(ManagedConnectionFactoryImpl factory, ManagedConnectionImpl connection) {
+    HazelcastTransactionImpl(ManagedConnectionFactoryImpl factory, ManagedConnectionImpl connection) {
         this.factory = factory;
         this.connection = connection;
 
@@ -78,13 +75,12 @@ public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransa
         if (null == txContext) {
             factory.logHzConnectionEvent(this, HzConnectionEvent.TX_START);
 
-            this.txContext = getHazelcastInstance().newTransactionContext();
+            txContext = getHazelcastInstance().newTransactionContext();
 
             log(Level.FINEST, "begin");
             txContext.beginTransaction();
 
             fireConnectionEvent(ConnectionEvent.LOCAL_TRANSACTION_STARTED);
-
         } else {
             log(Level.INFO, "Ignoring duplicate TX begin event");
         }
@@ -97,14 +93,13 @@ public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransa
         factory.logHzConnectionEvent(this, HzConnectionEvent.TX_COMPLETE);
 
         log(Level.FINEST, "commit");
-        if (this.txContext != null) {
-            this.txContext.commitTransaction();
-            fireConnectionEvent(ConnectionEvent.LOCAL_TRANSACTION_COMMITTED);
-            this.txContext = null;
-        } else {
+        if (txContext == null) {
             throw new ResourceException("Invalid transaction context; "
                     + "commit operation invoked without an active transaction context");
         }
+        txContext.commitTransaction();
+        fireConnectionEvent(ConnectionEvent.LOCAL_TRANSACTION_COMMITTED);
+        txContext = null;
     }
 
     /* (non-Javadoc)
@@ -114,14 +109,19 @@ public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransa
         factory.logHzConnectionEvent(this, HzConnectionEvent.TX_COMPLETE);
 
         log(Level.FINEST, "rollback");
-        if (this.txContext != null) {
-            this.txContext.rollbackTransaction();
-            fireConnectionEvent(ConnectionEvent.LOCAL_TRANSACTION_ROLLEDBACK);
-            this.txContext = null;
-        } else {
+        if (txContext == null) {
             throw new ResourceException("Invalid transaction context;"
                     + " rollback operation invoked without an active transaction context");
         }
+        txContext.rollbackTransaction();
+        fireConnectionEvent(ConnectionEvent.LOCAL_TRANSACTION_ROLLEDBACK);
+        txContext = null;
+    }
+
+    public void reset() {
+        log(Level.WARNING, "reset");
+        txContext = null;
+
     }
 
     public TransactionContext getTxContext() {
