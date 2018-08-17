@@ -20,6 +20,8 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.test.HazelcastParallelClassRunner;
 import com.hazelcast.test.HazelcastTestSupport;
 import com.hazelcast.test.annotation.QuickTest;
+import com.hazelcast.util.ExceptionUtil;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -31,6 +33,9 @@ import javax.resource.spi.ConnectionEvent;
 import javax.resource.spi.ConnectionEventListener;
 import javax.resource.spi.ManagedConnection;
 
+import java.util.concurrent.Future;
+
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -63,6 +68,29 @@ public class HazelcastTransactionImplTest extends HazelcastTestSupport {
     public void testTransactionBeginShouldFireEventHandler() throws ResourceException {
         transaction.begin();
         verify(mockEventListener).localTransactionStarted(any(ConnectionEvent.class));
+    }
+
+    @Test
+    public void testResetFromAnotherThread() throws Exception {
+        transaction.begin();
+        Future future = spawn(new Runnable() {
+            @Override public void run() {
+                try {
+                    transaction.rollback();
+                    fail("Rollback should throw exception");
+                } catch (Exception ignored) {
+                }
+                transaction.reset();
+                try {
+                    transaction.begin();
+                    transaction.commit();
+                } catch (ResourceException e) {
+                    throw ExceptionUtil.rethrow(e);
+                }
+            }
+        });
+
+        future.get();
     }
 
     @Test
