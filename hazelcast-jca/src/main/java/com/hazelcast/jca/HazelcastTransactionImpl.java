@@ -41,7 +41,7 @@ public class HazelcastTransactionImpl extends JcaBase implements HazelcastTransa
     /**
      * The hazelcast transaction context itself
      */
-    private TransactionContext txContext;
+    private volatile TransactionContext txContext;
 
     HazelcastTransactionImpl(ManagedConnectionFactoryImpl factory, ManagedConnectionImpl connection) {
         this.factory = factory;

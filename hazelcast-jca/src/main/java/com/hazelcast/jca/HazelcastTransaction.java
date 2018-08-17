@@ -22,4 +22,10 @@ package com.hazelcast.jca;
  * {@link javax.resource.spi.LocalTransaction} into one interface
  */
 public interface HazelcastTransaction extends javax.resource.cci.LocalTransaction, javax.resource.spi.LocalTransaction {
+
+    /**
+     * Resets the transaction so that it can be re-used
+     * Useful when a thread finishes without calling commit or rollback
+     */
+    public void reset();
 }
