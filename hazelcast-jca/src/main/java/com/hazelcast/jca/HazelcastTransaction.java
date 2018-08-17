@@ -27,5 +27,5 @@ public interface HazelcastTransaction extends javax.resource.cci.LocalTransactio
      * Resets the transaction so that it can be re-used
      * Useful when a thread finishes without calling commit or rollback
      */
-    public void reset();
+    void reset();
 }
