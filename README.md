@@ -295,6 +295,14 @@ By default the JCA starts a new Hazelcast Server Instance. If this is not necess
 
 To use a Hazelcast Client, modify the ```client``` property in the ra.xml file so its set to true. Also please make sure to configure a correct hazelcast client config file.
 
+### Reset for Non-rollbackable Local Transactions
+
+When a thread finishes without calling commit or rollback because of an error, the transaction context is leaked in the 
+`LocalTransaction`. Calling `rollback` from another thread is not possible because Hazelcast transactions do not span 
+multiple threads. Although resources (obtained locks) will be released automatically after timeout, this 
+`LocalTransaction` cannot be used. In such a scenario, `HazelcastTransaction#reset` method can be used to reset the
+transaction.
+
 # Known Issues
 
 - There is a regression in JBoss EAP 6.1.0 causing failure during Hazelcast Resource Adapter deployment. The issue is fixed in JBoss EAP 6.1.1. Please see <a href="https://bugzilla.redhat.com/show_bug.cgi?id=976294" target="_blank">this</a> for additional details.  
