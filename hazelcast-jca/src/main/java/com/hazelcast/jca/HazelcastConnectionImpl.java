@@ -46,7 +46,10 @@ import com.hazelcast.core.TransactionalMap;
 import com.hazelcast.core.TransactionalMultiMap;
 import com.hazelcast.core.TransactionalQueue;
 import com.hazelcast.core.TransactionalSet;
+import com.hazelcast.cp.CPSubsystem;
+import com.hazelcast.crdt.pncounter.PNCounter;
 import com.hazelcast.durableexecutor.DurableExecutorService;
+import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import com.hazelcast.logging.LoggingService;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.quorum.QuorumService;
@@ -294,6 +297,11 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
     }
 
     @Override
+    public FlakeIdGenerator getFlakeIdGenerator(String name) {
+        return getHazelcastInstance().getFlakeIdGenerator(name);
+    }
+
+    @Override
     public <E> IAtomicReference<E> getAtomicReference(String name) {
         return getHazelcastInstance().getAtomicReference(name);
     }
@@ -362,8 +370,18 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
     }
 
     @Override
+    public PNCounter getPNCounter(String name) {
+        return getHazelcastInstance().getPNCounter(name);
+    }
+
+    @Override
     public IScheduledExecutorService getScheduledExecutorService(final String s) {
         return getHazelcastInstance().getScheduledExecutorService(s);
+    }
+
+    @Override
+    public CPSubsystem getCPSubsystem() {
+        return getHazelcastInstance().getCPSubsystem();
     }
 
     // unsupported operations
