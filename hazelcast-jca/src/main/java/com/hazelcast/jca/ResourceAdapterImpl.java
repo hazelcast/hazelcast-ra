@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
         licenseDescription = "Copyright (c) 2008-2017, Hazelcast, Inc. All Rights Reserved.",
         licenseRequired = true,
         transactionSupport = TransactionSupport.TransactionSupportLevel.XATransaction,
-        version = "3.8")
+        version = "4.0")
 public class ResourceAdapterImpl implements ResourceAdapter, Referenceable, Serializable {
 
     /**

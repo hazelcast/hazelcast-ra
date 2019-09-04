@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.hazelcast</groupId>
         <artifactId>hazelcast-ra</artifactId>
-        <version>3.7.4-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -120,12 +120,6 @@
             <scope>test</scope>
             <version>${hazelcast.version}</version>
             <classifier>tests</classifier>
-        </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-client</artifactId>
-            <scope>provided</scope>
-            <version>${hazelcast.version}</version>
         </dependency>
 
         <dependency>

@@ -17,7 +17,7 @@
     <name>hazelcast-ra</name>
     <groupId>com.hazelcast</groupId>
     <artifactId>hazelcast-ra</artifactId>
-    <version>3.7.4-SNAPSHOT</version>
+    <version>4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Hazelcast In-Memory DataGrid Ra Plugin</description>
     <url>http://www.hazelcast.com/</url>
@@ -35,7 +35,7 @@
         <!-- Starting with Hazelcast 3.12, this module requires Java 8 -->
         <java.version>1.8</java.version>
 
-        <hazelcast.version>3.12.3</hazelcast.version>
+        <hazelcast.version>4.0</hazelcast.version>
 
         <junit.version>4.12</junit.version>
         <mockito.version>1.10.19</mockito.version>
@@ -52,7 +52,7 @@
 
         <maven.surefire.plugin.version>2.18.1</maven.surefire.plugin.version>
         <maven.checkstyle.plugin.version>2.15</maven.checkstyle.plugin.version>
-        <maven.findbugs.plugin.version>3.0.1</maven.findbugs.plugin.version>
+        <maven.findbugs.plugin.version>3.0.5</maven.findbugs.plugin.version>
         <maven.sonar.plugin.version>3.3.0.603</maven.sonar.plugin.version>
         <maven.jacoco.plugin.version>0.7.9</maven.jacoco.plugin.version>
     </properties>

@@ -21,6 +21,7 @@ import com.hazelcast.core.DistributedObjectListener;
 
 import javax.ejb.Local;
 import java.util.Collection;
+import java.util.UUID;
 
 @Local
 public interface ITestBean {
@@ -47,7 +48,7 @@ public interface ITestBean {
 
     void addDistributedObjectListener(DistributedObjectListener obj);
 
-    void removeDistributedObjectListener(String regId);
+    void removeDistributedObjectListener(UUID regId);
 
     Collection<DistributedObject> getDistributedObjects();
 }

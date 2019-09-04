@@ -18,33 +18,26 @@ package com.hazelcast.jca;
 
 import com.hazelcast.cardinality.CardinalityEstimator;
 import com.hazelcast.config.Config;
-import com.hazelcast.core.ClientService;
-import com.hazelcast.core.Cluster;
+import com.hazelcast.client.ClientService;
+import com.hazelcast.cluster.Cluster;
 import com.hazelcast.core.DistributedObject;
-import com.hazelcast.core.Endpoint;
+import com.hazelcast.cluster.Endpoint;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicLong;
-import com.hazelcast.core.IAtomicReference;
 import com.hazelcast.core.ICacheManager;
-import com.hazelcast.core.ICountDownLatch;
-import com.hazelcast.core.IList;
-import com.hazelcast.core.ILock;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.IQueue;
-import com.hazelcast.core.ISemaphore;
-import com.hazelcast.core.ITopic;
-import com.hazelcast.core.IdGenerator;
-import com.hazelcast.core.MultiMap;
-import com.hazelcast.core.PartitionService;
-import com.hazelcast.core.ReplicatedMap;
 import com.hazelcast.cp.CPSubsystem;
+import com.hazelcast.collection.IList;
 import com.hazelcast.crdt.pncounter.PNCounter;
 import com.hazelcast.durableexecutor.DurableExecutorService;
 import com.hazelcast.flakeidgen.FlakeIdGenerator;
+import com.hazelcast.map.IMap;
+import com.hazelcast.collection.IQueue;
+import com.hazelcast.splitbrainprotection.SplitBrainProtectionService;
+import com.hazelcast.topic.ITopic;
+import com.hazelcast.multimap.MultiMap;
+import com.hazelcast.partition.PartitionService;
+import com.hazelcast.replicatedmap.ReplicatedMap;
 import com.hazelcast.logging.LoggingService;
 import com.hazelcast.map.impl.MapService;
-import com.hazelcast.mapreduce.JobTracker;
-import com.hazelcast.quorum.QuorumService;
 import com.hazelcast.ringbuffer.Ringbuffer;
 import com.hazelcast.scheduledexecutor.IScheduledExecutorService;
 import com.hazelcast.test.HazelcastSerialClassRunner;
@@ -136,45 +129,15 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
     }
 
     @Test
-    public void getSemaphore() {
-        ISemaphore semaphore = connection.getSemaphore("s");
-        assertSame(hz.getSemaphore("s"), semaphore);
-    }
-
-    @Test
-    public void getLock() {
-        ILock lock = connection.getLock("lock");
-        assertSame(hz.getLock("lock"), lock);
-    }
-
-    @Test
     public void getExecutorService() {
         ExecutorService ex = connection.getExecutorService("ex");
         assertSame(hz.getExecutorService("ex"), ex);
     }
 
     @Test
-    public void getAtomicLong() {
-        IAtomicLong atomicLong = connection.getAtomicLong("atomicLong");
-        assertSame(hz.getAtomicLong("atomicLong"), atomicLong);
-    }
-
-    @Test
-    public void getIdGenerator() {
-        IdGenerator idGenerator = connection.getIdGenerator("id");
-        assertSame(hz.getIdGenerator("id"), idGenerator);
-    }
-
-    @Test
     public void getDistributedObject() {
         DistributedObject obj = connection.getDistributedObject(MapService.SERVICE_NAME, "id");
         assertSame(hz.getDistributedObject(MapService.SERVICE_NAME, "id"), obj);
-    }
-
-    @Test
-    public void getAtomicReference() {
-        IAtomicReference ref = connection.getAtomicReference("ref");
-        assertSame(hz.getAtomicReference("ref"), ref);
     }
 
     @Test
@@ -191,21 +154,15 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
     }
 
     @Test
-    public void getJobTracker() {
-        JobTracker jobTracker = connection.getJobTracker("jobTracker");
-        assertSame(hz.getJobTracker("jobTracker"), jobTracker);
-    }
-
-    @Test
     public void getCluster() {
         Cluster cluster = connection.getCluster();
         assertSame(hz.getCluster(), cluster);
     }
 
     @Test
-    public void getQuorumService() {
-        QuorumService quorumService = connection.getQuorumService();
-        assertSame(hz.getQuorumService(), quorumService);
+    public void getSplitBrainProtectionService() {
+        SplitBrainProtectionService splitBrainProtectionService = connection.getSplitBrainProtectionService();
+        assertSame(splitBrainProtectionService, hz.getSplitBrainProtectionService());
     }
 
     @Test
@@ -262,13 +219,6 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
     public void getCPSubsystem() {
         CPSubsystem cpSubsystem = connection.getCPSubsystem();
         assertSame(hz.getCPSubsystem(), cpSubsystem);
-    }
-
-    @Test
-    public void getCountDownLatch() {
-        String countDownLatchName = "countDownLatch";
-        ICountDownLatch countDownLatch = connection.getCountDownLatch(countDownLatchName);
-        assertSame(hz.getCountDownLatch(countDownLatchName), countDownLatch);
     }
 
     @Test
