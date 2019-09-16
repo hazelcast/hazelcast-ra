@@ -16,7 +16,7 @@
 
 package com.hazelcast.jca;
 
-import com.hazelcast.core.TransactionalMap;
+import com.hazelcast.transaction.TransactionalMap;
 import com.hazelcast.test.annotation.SlowTest;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.jboss.arquillian.junit.Arquillian;

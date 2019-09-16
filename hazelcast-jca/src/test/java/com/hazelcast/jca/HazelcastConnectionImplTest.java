@@ -17,27 +17,26 @@
 package com.hazelcast.jca;
 
 import com.hazelcast.config.Config;
-import com.hazelcast.core.ClientService;
-import com.hazelcast.core.Cluster;
+import com.hazelcast.client.ClientService;
+import com.hazelcast.cluster.Cluster;
 import com.hazelcast.core.DistributedObject;
-import com.hazelcast.core.Endpoint;
+import com.hazelcast.cluster.Endpoint;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicLong;
-import com.hazelcast.core.IAtomicReference;
-import com.hazelcast.core.IList;
-import com.hazelcast.core.ILock;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.IQueue;
-import com.hazelcast.core.ISemaphore;
-import com.hazelcast.core.ITopic;
+import com.hazelcast.cp.IAtomicLong;
+import com.hazelcast.cp.IAtomicReference;
+import com.hazelcast.collection.IList;
+import com.hazelcast.cp.lock.ILock;
+import com.hazelcast.map.IMap;
+import com.hazelcast.collection.IQueue;
+import com.hazelcast.cp.ISemaphore;
+import com.hazelcast.splitbrainprotection.SplitBrainProtectionService;
+import com.hazelcast.topic.ITopic;
 import com.hazelcast.core.IdGenerator;
-import com.hazelcast.core.MultiMap;
-import com.hazelcast.core.PartitionService;
-import com.hazelcast.core.ReplicatedMap;
+import com.hazelcast.multimap.MultiMap;
+import com.hazelcast.partition.PartitionService;
+import com.hazelcast.replicatedmap.ReplicatedMap;
 import com.hazelcast.logging.LoggingService;
 import com.hazelcast.map.impl.MapService;
-import com.hazelcast.mapreduce.JobTracker;
-import com.hazelcast.quorum.QuorumService;
 import com.hazelcast.ringbuffer.Ringbuffer;
 import com.hazelcast.test.HazelcastSerialClassRunner;
 import com.hazelcast.test.HazelcastTestSupport;
@@ -183,21 +182,15 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
     }
 
     @Test
-    public void getJobTracker() {
-        JobTracker jobTracker = connection.getJobTracker("jobTracker");
-        assertSame(jobTracker, hz.getJobTracker("jobTracker"));
-    }
-
-    @Test
     public void getCluster() {
         Cluster cluster = connection.getCluster();
         assertSame(cluster, hz.getCluster());
     }
 
     @Test
-    public void getQuorumService() {
-        QuorumService quorumService = connection.getQuorumService();
-        assertSame(quorumService, hz.getQuorumService());
+    public void getSplitBrainProtectionService() {
+        SplitBrainProtectionService splitBrainProtectionService = connection.getSplitBrainProtectionService();
+        assertSame(splitBrainProtectionService, hz.getSplitBrainProtectionService());
     }
 
     @Test
