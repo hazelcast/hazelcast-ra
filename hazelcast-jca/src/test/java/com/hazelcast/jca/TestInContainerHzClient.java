@@ -96,7 +96,15 @@ public class TestInContainerHzClient extends AbstractDeploymentHzClientTest {
 
         assertNotNull(testBean.getDistributedObjects());
         Collection<DistributedObject> distributedObjectCollection = testBean.getDistributedObjects();
+
+        boolean xaResourceCreated = false;
+
+        for (DistributedObject distributedObject : distributedObjectCollection) {
+            if (distributedObject.getName().equals("hz:impl:xaService"))
+                xaResourceCreated = true;
+        }
+
         //There should be one XAResource distibuted object in addition to two maps we created here
-        assertEquals(3, distributedObjectCollection.size());
+        assertTrue(xaResourceCreated);
     }
 }
