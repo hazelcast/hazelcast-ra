@@ -27,13 +27,11 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.cp.IAtomicLong;
 import com.hazelcast.cp.IAtomicReference;
 import com.hazelcast.core.ICacheManager;
-import com.hazelcast.cp.ICountDownLatch;
 import com.hazelcast.core.IExecutorService;
 import com.hazelcast.collection.IList;
 import com.hazelcast.cp.lock.ILock;
 import com.hazelcast.map.IMap;
 import com.hazelcast.collection.IQueue;
-import com.hazelcast.cp.ISemaphore;
 import com.hazelcast.collection.ISet;
 import com.hazelcast.splitbrainprotection.SplitBrainProtectionService;
 import com.hazelcast.topic.ITopic;
@@ -59,7 +57,7 @@ import com.hazelcast.transaction.TransactionContext;
 import com.hazelcast.transaction.TransactionException;
 import com.hazelcast.transaction.TransactionOptions;
 import com.hazelcast.transaction.TransactionalTask;
-import com.hazelcast.util.ExceptionUtil;
+import com.hazelcast.internal.util.ExceptionUtil;
 
 import javax.resource.NotSupportedException;
 import javax.resource.ResourceException;
@@ -204,16 +202,6 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
     @Override
     public IAtomicLong getAtomicLong(String name) {
         return getHazelcastInstance().getAtomicLong(name);
-    }
-
-    @Override
-    public ICountDownLatch getCountDownLatch(String name) {
-        return getHazelcastInstance().getCountDownLatch(name);
-    }
-
-    @Override
-    public ISemaphore getSemaphore(String name) {
-        return getHazelcastInstance().getSemaphore(name);
     }
 
     @Override

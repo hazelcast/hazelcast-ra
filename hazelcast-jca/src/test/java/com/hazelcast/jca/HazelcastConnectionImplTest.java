@@ -127,12 +127,6 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
     }
 
     @Test
-    public void getSemaphore() {
-        ISemaphore semaphore = connection.getSemaphore("s");
-        assertSame(hz.getSemaphore("s"), semaphore);
-    }
-
-    @Test
     public void getLock() {
         ILock lock = connection.getLock("lock");
         assertSame(hz.getLock("lock"), lock);
