@@ -28,6 +28,7 @@ import javax.ejb.Stateful;
 import javax.resource.ResourceException;
 import javax.resource.cci.ConnectionFactory;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -166,7 +167,7 @@ public class TestBean implements ITestBean {
     }
 
     @Override
-    public void removeDistributedObjectListener(String regId) {
+    public void removeDistributedObjectListener(UUID regId) {
         getConnection().removeDistributedObjectListener(regId);
     }
 

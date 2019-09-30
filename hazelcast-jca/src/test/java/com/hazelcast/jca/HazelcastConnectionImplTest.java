@@ -31,7 +31,7 @@ import com.hazelcast.collection.IQueue;
 import com.hazelcast.cp.ISemaphore;
 import com.hazelcast.splitbrainprotection.SplitBrainProtectionService;
 import com.hazelcast.topic.ITopic;
-import com.hazelcast.core.IdGenerator;
+import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import com.hazelcast.multimap.MultiMap;
 import com.hazelcast.partition.PartitionService;
 import com.hazelcast.replicatedmap.ReplicatedMap;
@@ -139,27 +139,15 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
     }
 
     @Test
-    public void getAtomicLong() {
-        IAtomicLong atomicLong = connection.getAtomicLong("atomicLong");
-        assertSame(hz.getAtomicLong("atomicLong"), atomicLong);
-    }
-
-    @Test
     public void getIdGenerator() {
-        IdGenerator idGenerator = connection.getIdGenerator("id");
-        assertSame(hz.getIdGenerator("id"), idGenerator);
+        FlakeIdGenerator idGenerator = connection.getFlakeIdGenerator("id");
+        assertSame(hz.getFlakeIdGenerator("id"), idGenerator);
     }
 
     @Test
     public void getDistributedObject() {
         DistributedObject obj = connection.getDistributedObject(MapService.SERVICE_NAME, "id");
         assertSame(hz.getDistributedObject(MapService.SERVICE_NAME, "id"), obj);
-    }
-
-    @Test
-    public void getAtomicReference() {
-        IAtomicReference ref = connection.getAtomicReference("ref");
-        assertSame(hz.getAtomicReference("ref"), ref);
     }
 
     @Test

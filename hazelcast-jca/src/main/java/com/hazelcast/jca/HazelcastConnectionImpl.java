@@ -35,7 +35,6 @@ import com.hazelcast.collection.IQueue;
 import com.hazelcast.collection.ISet;
 import com.hazelcast.splitbrainprotection.SplitBrainProtectionService;
 import com.hazelcast.topic.ITopic;
-import com.hazelcast.core.IdGenerator;
 import com.hazelcast.core.LifecycleService;
 import com.hazelcast.multimap.MultiMap;
 import com.hazelcast.partition.PartitionService;
@@ -67,6 +66,7 @@ import javax.resource.cci.ResultSetInfo;
 import javax.resource.spi.ConnectionEvent;
 import javax.security.auth.Subject;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -200,22 +200,17 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
     }
 
     @Override
-    public IAtomicLong getAtomicLong(String name) {
-        return getHazelcastInstance().getAtomicLong(name);
-    }
-
-    @Override
     public Collection<DistributedObject> getDistributedObjects() {
         return getHazelcastInstance().getDistributedObjects();
     }
 
     @Override
-    public String addDistributedObjectListener(DistributedObjectListener distributedObjectListener) {
+    public UUID addDistributedObjectListener(DistributedObjectListener distributedObjectListener) {
         return getHazelcastInstance().addDistributedObjectListener(distributedObjectListener);
     }
 
     @Override
-    public boolean removeDistributedObjectListener(String registrationId) {
+    public boolean removeDistributedObjectListener(UUID registrationId) {
         return getHazelcastInstance().removeDistributedObjectListener(registrationId);
     }
 
@@ -291,16 +286,6 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
         }
         HazelcastXAResource xaResource = getXAResource();
         return xaResource.getTransactionContext();
-    }
-
-    @Override
-    public IdGenerator getIdGenerator(String name) {
-        return getHazelcastInstance().getIdGenerator(name);
-    }
-
-    @Override
-    public <E> IAtomicReference<E> getAtomicReference(String name) {
-        return getHazelcastInstance().getAtomicReference(name);
     }
 
     @Override
