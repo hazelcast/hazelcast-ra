@@ -24,8 +24,6 @@ import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.DistributedObjectListener;
 import com.hazelcast.cluster.Endpoint;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.cp.IAtomicLong;
-import com.hazelcast.cp.IAtomicReference;
 import com.hazelcast.core.ICacheManager;
 import com.hazelcast.core.IExecutorService;
 import com.hazelcast.collection.IList;
