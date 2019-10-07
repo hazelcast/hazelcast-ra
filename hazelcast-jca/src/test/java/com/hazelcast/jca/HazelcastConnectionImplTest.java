@@ -22,13 +22,9 @@ import com.hazelcast.cluster.Cluster;
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.cluster.Endpoint;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.cp.IAtomicLong;
-import com.hazelcast.cp.IAtomicReference;
 import com.hazelcast.collection.IList;
-import com.hazelcast.cp.lock.ILock;
 import com.hazelcast.map.IMap;
 import com.hazelcast.collection.IQueue;
-import com.hazelcast.cp.ISemaphore;
 import com.hazelcast.splitbrainprotection.SplitBrainProtectionService;
 import com.hazelcast.topic.ITopic;
 import com.hazelcast.flakeidgen.FlakeIdGenerator;
@@ -124,12 +120,6 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
     public void getList() {
         IList list = connection.getList("list");
         assertSame(hz.getList("list"), list);
-    }
-
-    @Test
-    public void getLock() {
-        ILock lock = connection.getLock("lock");
-        assertSame(hz.getLock("lock"), lock);
     }
 
     @Test

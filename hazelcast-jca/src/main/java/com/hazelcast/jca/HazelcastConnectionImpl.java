@@ -27,7 +27,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICacheManager;
 import com.hazelcast.core.IExecutorService;
 import com.hazelcast.collection.IList;
-import com.hazelcast.cp.lock.ILock;
 import com.hazelcast.map.IMap;
 import com.hazelcast.collection.IQueue;
 import com.hazelcast.collection.ISet;
@@ -299,12 +298,6 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
     @Override
     public String getName() {
         return getHazelcastInstance().getName();
-    }
-
-
-    @Override
-    public ILock getLock(String key) {
-        return getHazelcastInstance().getLock(key);
     }
 
     @Override
