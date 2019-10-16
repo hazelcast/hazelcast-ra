@@ -32,10 +32,10 @@
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- we want to remain java 1.6 compatible -->
-        <java.version>1.6</java.version>
+        <!-- Starting with Hazelcast 3.12, this module requires Java 8 -->
+        <java.version>1.8</java.version>
 
-        <hazelcast.version>3.12.2</hazelcast.version>
+        <hazelcast.version>3.12.3</hazelcast.version>
 
         <junit.version>4.12</junit.version>
         <mockito.version>1.10.19</mockito.version>
