@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
@@ -47,6 +48,14 @@ public class ManagedConnectionFactoryImplTest extends HazelcastTestSupport {
     @Before
     public void setup() throws Exception {
         connectionFactory = new ManagedConnectionFactoryImpl();
+    }
+
+    @Test
+    public void testCreateConnectionFactory()
+            throws ResourceException {
+        ((ManagedConnectionFactoryImpl) connectionFactory).setConnectionTracingEvents(null);
+        Object connectionFactory = this.connectionFactory.createConnectionFactory();
+        assertNotNull(connectionFactory);
     }
 
     @Test

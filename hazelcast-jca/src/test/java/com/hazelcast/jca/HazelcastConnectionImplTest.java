@@ -16,6 +16,7 @@
 
 package com.hazelcast.jca;
 
+import com.hazelcast.cardinality.CardinalityEstimator;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.ClientService;
 import com.hazelcast.core.Cluster;
@@ -24,6 +25,8 @@ import com.hazelcast.core.Endpoint;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IAtomicLong;
 import com.hazelcast.core.IAtomicReference;
+import com.hazelcast.core.ICacheManager;
+import com.hazelcast.core.ICountDownLatch;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.ILock;
 import com.hazelcast.core.IMap;
@@ -34,11 +37,16 @@ import com.hazelcast.core.IdGenerator;
 import com.hazelcast.core.MultiMap;
 import com.hazelcast.core.PartitionService;
 import com.hazelcast.core.ReplicatedMap;
+import com.hazelcast.cp.CPSubsystem;
+import com.hazelcast.crdt.pncounter.PNCounter;
+import com.hazelcast.durableexecutor.DurableExecutorService;
+import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import com.hazelcast.logging.LoggingService;
 import com.hazelcast.map.impl.MapService;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.quorum.QuorumService;
 import com.hazelcast.ringbuffer.Ringbuffer;
+import com.hazelcast.scheduledexecutor.IScheduledExecutorService;
 import com.hazelcast.test.HazelcastSerialClassRunner;
 import com.hazelcast.test.HazelcastTestSupport;
 import com.hazelcast.test.annotation.QuickTest;
@@ -235,4 +243,59 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
         XAResource resource = connection.getXAResource();
         assertNull(resource);
     }
+
+    @Test
+    public void getFlakeIdGenerator() {
+        String flakeIdGeneratorName = "flakeIdGenerator";
+        FlakeIdGenerator resource = connection.getFlakeIdGenerator(flakeIdGeneratorName);
+        assertSame(hz.getFlakeIdGenerator(flakeIdGeneratorName), resource);
+    }
+
+    @Test
+    public void getPNCounter() {
+        String pnCounterName = "pnCounter";
+        PNCounter resource = connection.getPNCounter(pnCounterName);
+        assertSame(hz.getPNCounter(pnCounterName), resource);
+    }
+
+    @Test
+    public void getCPSubsystem() {
+        CPSubsystem resource = connection.getCPSubsystem();
+        assertSame(hz.getCPSubsystem(), resource);
+    }
+
+    @Test
+    public void getCountDownLatch() {
+        String countDownLatchName = "countDownLatch";
+        ICountDownLatch resource = connection.getCountDownLatch(countDownLatchName);
+        assertSame(hz.getCountDownLatch(countDownLatchName), resource);
+    }
+
+    @Test
+    public void getDurableExecutorService() {
+        String durableExecutorServiceName = "durableExecutorService";
+        DurableExecutorService resource = connection.getDurableExecutorService(durableExecutorServiceName);
+        assertSame(hz.getDurableExecutorService(durableExecutorServiceName), resource);
+    }
+
+    @Test
+    public void getScheduledExecutorService() {
+        String scheduledExecutorServiceName = "scheduledExecutorService";
+        IScheduledExecutorService resource = connection.getScheduledExecutorService(scheduledExecutorServiceName);
+        assertSame(hz.getScheduledExecutorService(scheduledExecutorServiceName), resource);
+    }
+
+    @Test
+    public void getCardinalityEstimator() {
+        String cardinalityEstimatorName = "cardinalityEstimator";
+        CardinalityEstimator resource = connection.getCardinalityEstimator(cardinalityEstimatorName);
+        assertSame(hz.getCardinalityEstimator(cardinalityEstimatorName), resource);
+    }
+
+    @Test
+    public void getCacheManager() {
+        ICacheManager resource = connection.getCacheManager();
+        assertSame(hz.getCacheManager(), resource);
+    }
+
 }
