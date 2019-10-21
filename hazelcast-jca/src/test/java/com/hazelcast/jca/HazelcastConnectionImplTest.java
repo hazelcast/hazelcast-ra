@@ -101,8 +101,8 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
 
     @Test
     public void getMap() {
-        IMap topic = connection.getMap("map");
-        assertSame(hz.getMap("map"), topic);
+        IMap map = connection.getMap("map");
+        assertSame(hz.getMap("map"), map);
     }
 
     @Test
@@ -180,62 +180,62 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
     @Test
     public void getName() {
         String name = connection.getName();
-        assertSame(name, hz.getName());
+        assertSame(hz.getName(), name);
     }
 
     @Test
     public void testGetConfig() {
         Config config = connection.getConfig();
-        assertSame(config, hz.getConfig());
+        assertSame(hz.getConfig(), config);
 
     }
 
     @Test
     public void getJobTracker() {
         JobTracker jobTracker = connection.getJobTracker("jobTracker");
-        assertSame(jobTracker, hz.getJobTracker("jobTracker"));
+        assertSame(hz.getJobTracker("jobTracker"), jobTracker);
     }
 
     @Test
     public void getCluster() {
         Cluster cluster = connection.getCluster();
-        assertSame(cluster, hz.getCluster());
+        assertSame(hz.getCluster(), cluster);
     }
 
     @Test
     public void getQuorumService() {
         QuorumService quorumService = connection.getQuorumService();
-        assertSame(quorumService, hz.getQuorumService());
+        assertSame(hz.getQuorumService(), quorumService);
     }
 
     @Test
     public void getClientService() {
         ClientService clientService = connection.getClientService();
-        assertNotSame(clientService, hz.getClientService());
+        assertNotSame(hz.getClientService(), clientService);
     }
 
     @Test
     public void getLoggingService() {
         LoggingService loggingService = connection.getLoggingService();
-        assertSame(loggingService, hz.getLoggingService());
+        assertSame(hz.getLoggingService(), loggingService);
     }
 
     @Test
     public void getUserContext() {
         Map userContext = connection.getUserContext();
-        assertSame(userContext, hz.getUserContext());
+        assertSame(hz.getUserContext(), userContext);
     }
 
     @Test
     public void getPartitionService() {
         PartitionService partitionService = connection.getPartitionService();
-        assertSame(partitionService, hz.getPartitionService());
+        assertSame(hz.getPartitionService(), partitionService);
     }
 
     @Test
     public void getLocalEndpoint() {
         Endpoint endpoint = connection.getLocalEndpoint();
-        assertSame(endpoint, hz.getLocalEndpoint());
+        assertSame(hz.getLocalEndpoint(), endpoint);
     }
 
     @Test
@@ -247,55 +247,55 @@ public class HazelcastConnectionImplTest extends HazelcastTestSupport {
     @Test
     public void getFlakeIdGenerator() {
         String flakeIdGeneratorName = "flakeIdGenerator";
-        FlakeIdGenerator resource = connection.getFlakeIdGenerator(flakeIdGeneratorName);
-        assertSame(hz.getFlakeIdGenerator(flakeIdGeneratorName), resource);
+        FlakeIdGenerator flakeIdGenerator = connection.getFlakeIdGenerator(flakeIdGeneratorName);
+        assertSame(hz.getFlakeIdGenerator(flakeIdGeneratorName), flakeIdGenerator);
     }
 
     @Test
     public void getPNCounter() {
         String pnCounterName = "pnCounter";
-        PNCounter resource = connection.getPNCounter(pnCounterName);
-        assertSame(hz.getPNCounter(pnCounterName), resource);
+        PNCounter pnCounter = connection.getPNCounter(pnCounterName);
+        assertSame(hz.getPNCounter(pnCounterName), pnCounter);
     }
 
     @Test
     public void getCPSubsystem() {
-        CPSubsystem resource = connection.getCPSubsystem();
-        assertSame(hz.getCPSubsystem(), resource);
+        CPSubsystem cpSubsystem = connection.getCPSubsystem();
+        assertSame(hz.getCPSubsystem(), cpSubsystem);
     }
 
     @Test
     public void getCountDownLatch() {
         String countDownLatchName = "countDownLatch";
-        ICountDownLatch resource = connection.getCountDownLatch(countDownLatchName);
-        assertSame(hz.getCountDownLatch(countDownLatchName), resource);
+        ICountDownLatch countDownLatch = connection.getCountDownLatch(countDownLatchName);
+        assertSame(hz.getCountDownLatch(countDownLatchName), countDownLatch);
     }
 
     @Test
     public void getDurableExecutorService() {
         String durableExecutorServiceName = "durableExecutorService";
-        DurableExecutorService resource = connection.getDurableExecutorService(durableExecutorServiceName);
-        assertSame(hz.getDurableExecutorService(durableExecutorServiceName), resource);
+        DurableExecutorService durableExecutorService = connection.getDurableExecutorService(durableExecutorServiceName);
+        assertSame(hz.getDurableExecutorService(durableExecutorServiceName), durableExecutorService);
     }
 
     @Test
     public void getScheduledExecutorService() {
         String scheduledExecutorServiceName = "scheduledExecutorService";
-        IScheduledExecutorService resource = connection.getScheduledExecutorService(scheduledExecutorServiceName);
-        assertSame(hz.getScheduledExecutorService(scheduledExecutorServiceName), resource);
+        IScheduledExecutorService scheduledExecutorService = connection.getScheduledExecutorService(scheduledExecutorServiceName);
+        assertSame(hz.getScheduledExecutorService(scheduledExecutorServiceName), scheduledExecutorService);
     }
 
     @Test
     public void getCardinalityEstimator() {
         String cardinalityEstimatorName = "cardinalityEstimator";
-        CardinalityEstimator resource = connection.getCardinalityEstimator(cardinalityEstimatorName);
-        assertSame(hz.getCardinalityEstimator(cardinalityEstimatorName), resource);
+        CardinalityEstimator cardinalityEstimator = connection.getCardinalityEstimator(cardinalityEstimatorName);
+        assertSame(hz.getCardinalityEstimator(cardinalityEstimatorName), cardinalityEstimator);
     }
 
     @Test
     public void getCacheManager() {
-        ICacheManager resource = connection.getCacheManager();
-        assertSame(hz.getCacheManager(), resource);
+        ICacheManager cacheManager = connection.getCacheManager();
+        assertSame(hz.getCacheManager(), cacheManager);
     }
 
 }
