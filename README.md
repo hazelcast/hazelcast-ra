@@ -1,8 +1,8 @@
 # Table of Contents
 
 * [Getting Started](#getting-started)
-* [Integrating into Java EE / Jakarta EE](#integrating-hazelcast-into-java-ee-jakarta-ee)
-* [Sample Code for Java EE / Jakarta EE Integration](#sample-code-for-java-ee-jakarta-ee-integration)
+* [Integrating into Java EE / Jakarta EE](#integrating-hazelcast-into-java-ee--jakarta-ee)
+* [Sample Code for Java EE / Jakarta EE Integration](#sample-code-for-java-ee--jakarta-ee-integration)
 * [Configuring Resource Adapter](#configuring-resource-adapter)
 * [Configuring a Glassfish v3 Web Application](#configuring-a-glassfish-v3-web-application)
 * [Configuring a Wildfly 10.1 Web Application](#configuring-a-wildfly-101-web-application)
