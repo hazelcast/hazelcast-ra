@@ -49,7 +49,7 @@ import java.util.concurrent.atomic.AtomicInteger;
         displayName = "Hazelcast",
         vendorName = "Hazelcast.com",
         eisType = "Hazelcast",
-        licenseDescription = "Copyright (c) 2008-2017, Hazelcast, Inc. All Rights Reserved.",
+        licenseDescription = "Copyright (c) 2008-2020, Hazelcast, Inc. All Rights Reserved.",
         licenseRequired = true,
         transactionSupport = TransactionSupport.TransactionSupportLevel.XATransaction,
         version = "4.0")
