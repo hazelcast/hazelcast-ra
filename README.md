@@ -21,7 +21,9 @@ please see releases prior to v3.7 on [hazelcast main repository](https://github.
 
 As of hazelcast-ra v3.7, hazelcast-ra module has its own release cycle with initial release of [v3.7](https://github.com/hazelcast/hazelcast-ra/releases/tag/v3.7)
 
-As of hazelcast-ra v3.7.3, hazelcast-ra module will require Java 8 as minimum since it uses Hazelcast IMDG v3.12.3 which also requires so.  
+As of hazelcast-ra v3.7.3, hazelcast-ra module will require Java 8 as minimum since it uses Hazelcast IMDG v3.12.3 which also requires so.
+
+Starting with hazelcast-ra v4.0, hazelcast-ra module will require Hazelcast 4.0+.
 
 # Integrating Hazelcast into Java EE / Jakarta EE
 

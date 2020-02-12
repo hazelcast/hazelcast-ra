@@ -1,58 +1,50 @@
 /*
- * Copyright (c) 2008-2016, Hazelcast, Inc. All Rights Reserved.
+ * Copyright 2020 Hazelcast Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Hazelcast Community License (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the
+ * License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * http://hazelcast.com/hazelcast-community-license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 
 package com.hazelcast.jca;
 
 import com.hazelcast.cardinality.CardinalityEstimator;
 import com.hazelcast.config.Config;
-import com.hazelcast.core.ClientService;
-import com.hazelcast.core.Cluster;
+import com.hazelcast.client.ClientService;
+import com.hazelcast.cluster.Cluster;
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.DistributedObjectListener;
-import com.hazelcast.core.Endpoint;
+import com.hazelcast.cluster.Endpoint;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicLong;
-import com.hazelcast.core.IAtomicReference;
 import com.hazelcast.core.ICacheManager;
-import com.hazelcast.core.ICountDownLatch;
 import com.hazelcast.core.IExecutorService;
-import com.hazelcast.core.IList;
-import com.hazelcast.core.ILock;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.IQueue;
-import com.hazelcast.core.ISemaphore;
-import com.hazelcast.core.ISet;
-import com.hazelcast.core.ITopic;
-import com.hazelcast.core.IdGenerator;
+import com.hazelcast.collection.IList;
+import com.hazelcast.map.IMap;
+import com.hazelcast.collection.IQueue;
+import com.hazelcast.collection.ISet;
+import com.hazelcast.splitbrainprotection.SplitBrainProtectionService;
+import com.hazelcast.topic.ITopic;
 import com.hazelcast.core.LifecycleService;
-import com.hazelcast.core.MultiMap;
-import com.hazelcast.core.PartitionService;
-import com.hazelcast.core.ReplicatedMap;
-import com.hazelcast.core.TransactionalList;
-import com.hazelcast.core.TransactionalMap;
-import com.hazelcast.core.TransactionalMultiMap;
-import com.hazelcast.core.TransactionalQueue;
-import com.hazelcast.core.TransactionalSet;
+import com.hazelcast.multimap.MultiMap;
+import com.hazelcast.partition.PartitionService;
+import com.hazelcast.replicatedmap.ReplicatedMap;
+import com.hazelcast.transaction.TransactionalList;
+import com.hazelcast.transaction.TransactionalMap;
+import com.hazelcast.transaction.TransactionalMultiMap;
+import com.hazelcast.transaction.TransactionalQueue;
+import com.hazelcast.transaction.TransactionalSet;
 import com.hazelcast.cp.CPSubsystem;
 import com.hazelcast.crdt.pncounter.PNCounter;
 import com.hazelcast.durableexecutor.DurableExecutorService;
 import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import com.hazelcast.logging.LoggingService;
-import com.hazelcast.mapreduce.JobTracker;
-import com.hazelcast.quorum.QuorumService;
 import com.hazelcast.ringbuffer.Ringbuffer;
 import com.hazelcast.scheduledexecutor.IScheduledExecutorService;
 import com.hazelcast.transaction.HazelcastXAResource;
@@ -60,7 +52,7 @@ import com.hazelcast.transaction.TransactionContext;
 import com.hazelcast.transaction.TransactionException;
 import com.hazelcast.transaction.TransactionOptions;
 import com.hazelcast.transaction.TransactionalTask;
-import com.hazelcast.util.ExceptionUtil;
+import com.hazelcast.internal.util.ExceptionUtil;
 
 import javax.resource.NotSupportedException;
 import javax.resource.ResourceException;
@@ -70,6 +62,7 @@ import javax.resource.cci.ResultSetInfo;
 import javax.resource.spi.ConnectionEvent;
 import javax.security.auth.Subject;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -203,32 +196,17 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
     }
 
     @Override
-    public IAtomicLong getAtomicLong(String name) {
-        return getHazelcastInstance().getAtomicLong(name);
-    }
-
-    @Override
-    public ICountDownLatch getCountDownLatch(String name) {
-        return getHazelcastInstance().getCountDownLatch(name);
-    }
-
-    @Override
-    public ISemaphore getSemaphore(String name) {
-        return getHazelcastInstance().getSemaphore(name);
-    }
-
-    @Override
     public Collection<DistributedObject> getDistributedObjects() {
         return getHazelcastInstance().getDistributedObjects();
     }
 
     @Override
-    public String addDistributedObjectListener(DistributedObjectListener distributedObjectListener) {
+    public UUID addDistributedObjectListener(DistributedObjectListener distributedObjectListener) {
         return getHazelcastInstance().addDistributedObjectListener(distributedObjectListener);
     }
 
     @Override
-    public boolean removeDistributedObjectListener(String registrationId) {
+    public boolean removeDistributedObjectListener(UUID registrationId) {
         return getHazelcastInstance().removeDistributedObjectListener(registrationId);
     }
 
@@ -243,8 +221,8 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
     }
 
     @Override
-    public QuorumService getQuorumService() {
-        return getHazelcastInstance().getQuorumService();
+    public SplitBrainProtectionService getSplitBrainProtectionService() {
+        return getHazelcastInstance().getSplitBrainProtectionService();
     }
 
     @Override
@@ -307,16 +285,6 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
     }
 
     @Override
-    public IdGenerator getIdGenerator(String name) {
-        return getHazelcastInstance().getIdGenerator(name);
-    }
-
-    @Override
-    public <E> IAtomicReference<E> getAtomicReference(String name) {
-        return getHazelcastInstance().getAtomicReference(name);
-    }
-
-    @Override
     public <K, V> ReplicatedMap<K, V> getReplicatedMap(String name) {
         return getHazelcastInstance().getReplicatedMap(name);
     }
@@ -326,23 +294,9 @@ public class HazelcastConnectionImpl implements HazelcastConnection {
         return getHazelcastInstance().getRingbuffer(name);
     }
 
-    /**
-     * @deprecated
-     */
-    @Override
-    public JobTracker getJobTracker(String name) {
-        return getHazelcastInstance().getJobTracker(name);
-    }
-
     @Override
     public String getName() {
         return getHazelcastInstance().getName();
-    }
-
-
-    @Override
-    public ILock getLock(String key) {
-        return getHazelcastInstance().getLock(key);
     }
 
     @Override
