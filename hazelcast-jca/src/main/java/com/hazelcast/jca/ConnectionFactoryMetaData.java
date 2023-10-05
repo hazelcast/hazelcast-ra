@@ -29,14 +29,14 @@ final class ConnectionFactoryMetaData implements ResourceAdapterMetaData {
     private static final Package HZ_PACKAGE = ConnectionFactoryImpl.class.getPackage();
 
     /**
-     * @return the implementation title from Hazelast
+     * @return the implementation title from Hazelcast
      */
     public String getAdapterName() {
         return HZ_PACKAGE.getImplementationTitle();
     }
 
     /**
-     * @return the specification title from Hazelast
+     * @return the specification title from Hazelcast
      */
     public String getAdapterShortDescription() {
         return HZ_PACKAGE.getSpecificationTitle();
